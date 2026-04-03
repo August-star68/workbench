@@ -663,15 +663,141 @@ button {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.table-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.table-section {
+  display: grid;
+  gap: 10px;
+}
+
+.table-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.rule-strip {
+  display: block;
+}
+
+.rule-card {
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(17, 24, 39, 0.06);
+  background: linear-gradient(180deg, rgba(246, 250, 252, 0.96), rgba(236, 243, 248, 0.88));
+}
+
+.rule-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.rule-card strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.98rem;
+}
+
+.rule-card.rule-total {
+  display: grid;
+  grid-template-columns: 1.4fr auto;
+  align-items: center;
+  gap: 16px;
+  color: white;
+  background: linear-gradient(135deg, #17324d, #0d6a88);
+}
+
+.rule-total p,
+.rule-total .card-label {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.rule-copy p {
+  margin-top: 6px;
+}
+
+.rule-result {
+  text-align: right;
+}
+
+.rule-total strong {
+  margin: 8px 0 4px;
+  font-size: 1.8rem;
+  font-family: "Outfit", sans-serif;
+}
+
+.table-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.table-total {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--primary);
+  background: rgba(223, 242, 248, 0.9);
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 720px;
+}
+
+.data-table th,
+.data-table td {
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid rgba(17, 24, 39, 0.08);
+  font-size: 0.88rem;
+}
+
+.data-table th {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  background: rgba(238, 244, 248, 0.9);
+}
+
+.data-table td {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.data-table tbody tr:hover td {
+  background: rgba(240, 248, 251, 0.92);
+}
+
 @media (max-width: 1100px) {
   .dashboard-grid,
   .list-grid,
-  .summary-grid {
+  .summary-grid,
+  .table-grid-2 {
     grid-template-columns: 1fr;
   }
 
   .fishbone {
     min-width: 980px;
+  }
+
+  .rule-card.rule-total {
+    grid-template-columns: 1fr;
   }
 
   .shortcut-grid,

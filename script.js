@@ -63,6 +63,24 @@ const menuConfig = {
       { id: "mall-members", label: "会员增长", desc: "复购、转化与权益运营" }
     ]
   },
+  report: {
+    title: "统计报表",
+    pages: [
+      { id: "report-sales", label: "销售报表", desc: "销售额、目标和趋势分析" },
+      { id: "report-customer", label: "客户报表", desc: "客户结构与转化表现" },
+      { id: "report-product", label: "商品报表", desc: "品类销售与毛利分析" },
+      { id: "report-finance", label: "经营分析", desc: "回款、欠款和利润汇总" }
+    ]
+  },
+  wallet: {
+    title: "销售钱包",
+    pages: [
+      { id: "wallet-estimate", label: "预计提成", desc: "预计可分提成与收入汇总" },
+      { id: "wallet-income", label: "提成收入", desc: "订单提成收入明细" },
+      { id: "wallet-deduction", label: "提成扣减", desc: "扣减项与原因说明" },
+      { id: "wallet-order", label: "订单利润", desc: "履后毛利与非销费用分析" }
+    ]
+  },
   finance: {
     title: "财务管理",
     pages: [
@@ -534,6 +552,131 @@ const contentMap = {
         ["节气海报", "适合节日活动和专题营销。", "节点营销"]
       ]
     }),
+  "report-sales": () =>
+    renderModulePage({
+      title: "销售报表",
+      intro:
+        "按时间、区域和团队查看销售表现，辅助复盘目标完成进度和增长趋势。",
+      stats: [
+        ["本月销售额", "¥ 3.28M", "较上月 +18%"],
+        ["目标达成率", "76%", "华东区领先"],
+        ["日均销售额", "¥ 286K", "今日已完成 12 单"]
+      ],
+      items: [
+        ["区域销售排行", "华东、华南、华北位列前三。", "区域分析"],
+        ["团队完成率", "KA 组表现最好，渠道组提升明显。", "团队表现"],
+        ["周趋势", "本周销售连续三天高于均值。", "趋势观察"],
+        ["月度目标", "预计月末可完成目标的 92%。", "预测"]
+      ]
+    }),
+  "report-customer": () =>
+    renderModulePage({
+      title: "客户报表",
+      intro:
+        "从客户数量、活跃度、转化率和流失预警等维度分析客户经营情况。",
+      stats: [
+        ["客户总数", "1,286", "A 类客户 184 家"],
+        ["本周活跃", "319", "较上周 +12%"],
+        ["转化率", "36%", "高潜客户占比提升"]
+      ],
+      items: [
+        ["客户结构", "医疗机构与连锁药房占比最高。", "结构分布"],
+        ["活跃趋势", "本周活跃客户主要来自华东区。", "活跃分析"],
+        ["流失预警", "27 家客户需优先回访。", "风险提醒"],
+        ["新客转化", "展会线索与商城咨询转化较快。", "来源表现"]
+      ]
+    }),
+  "report-product": () =>
+    renderModulePage({
+      title: "商品报表",
+      intro:
+        "查看商品销售额、销量、毛利和品类结构，支持选品与定价决策。",
+      stats: [
+        ["在售商品", "1,904", "本月上新 86 款"],
+        ["高毛利商品", "142", "蓝莓系列需关注价格波动"],
+        ["缺货预警", "19", "重点关注活动商品"]
+      ],
+      items: [
+        ["热销品类", "基础耗材与组合包销量最高。", "销售排行"],
+        ["负毛利商品", "P0003123 蓝莓需尽快优化价格策略。", "风险商品"],
+        ["动销分析", "低动销商品建议搭配爆品促销。", "运营建议"],
+        ["品类贡献", "前 20 个 SKU 贡献主要销售额。", "贡献分析"]
+      ]
+    }),
+  "report-finance": () =>
+    renderModulePage({
+      title: "经营分析",
+      intro:
+        "聚合销售、回款、欠款和利润数据，帮助管理层快速掌握整体经营状况。",
+      stats: [
+        ["回款金额", "¥ 2.1M", "本周完成度 93%"],
+        ["欠款余额", "¥ 12.6M", "15 家风险客户"],
+        ["综合毛利率", "22%", "重点项目可适度下探"]
+      ],
+      items: [
+        ["回款结构", "大客户回款稳定，经销商周期较长。", "回款分析"],
+        ["账龄分布", "30 天内应收占比 68%。", "账龄分析"],
+        ["利润趋势", "本月利润保持稳步提升。", "利润趋势"],
+        ["经营预警", "华中区欠款改善空间较大。", "区域预警"]
+      ]
+    }),
+  "wallet-estimate": () =>
+    renderWalletEstimatePage(),
+  "wallet-income": () =>
+    renderTablePage({
+      title: "提成收入",
+      intro:
+        "按订单查看销售提成收入明细，方便核对每一笔订单对应的收入来源。",
+      stats: [
+        ["提成收入笔数", "36", "本月新增 9 笔"],
+        ["平均单笔提成", "¥ 1,175", "高毛利订单更优"],
+        ["最高提成订单", "¥ 8,640", "来自瑞康年度续签"]
+      ],
+      columns: ["订单号", "销售渠道", "商品名称", "销售金额", "履后毛利"],
+      rows: [
+        ["SO2026040218", "大客户直销", "蓝莓系列组合包", "¥ 128,000", "¥ 43,200"],
+        ["SO2026040172", "渠道分销", "基础耗材套装", "¥ 86,500", "¥ 21,680"],
+        ["SO2026040109", "来福商城", "门诊耗材组合", "¥ 42,900", "¥ 9,460"],
+        ["SO2026040086", "区域直营网", "妇幼专科组合", "¥ 67,300", "¥ 18,920"],
+        ["SO2026040061", "渠道分销", "蓝莓单品包", "¥ 35,800", "¥ 8,140"]
+      ]
+    }),
+  "wallet-deduction": () =>
+    renderTablePage({
+      title: "提成扣减",
+      intro:
+        "展示提成扣减原因与明细，包括负毛利、异常费用和售后影响，便于销售提前预判。",
+      stats: [
+        ["扣减金额", "¥ 6,820", "本月累计扣减"],
+        ["扣减订单", "7", "3 笔需重点复核"],
+        ["主要原因", "负毛利", "其次为非销费用分摊"]
+      ],
+      columns: ["费用类型", "单据", "扣减金额"],
+      rows: [
+        ["负毛利扣减", "订单 SO2026040132", "¥ 2,360"],
+        ["非销费用分摊", "费用单 FY2026040211", "¥ 1,280"],
+        ["售后补发扣减", "售后单 SH2026040114", "¥ 860"],
+        ["物流超支扣减", "费用单 FY2026040186", "¥ 1,120"],
+        ["活动物料分摊", "费用单 FY2026040156", "¥ 1,200"]
+      ]
+    }),
+  "wallet-order": () =>
+    renderModulePage({
+      title: "订单利润",
+      intro:
+        "按订单查看履后毛利、非销费用和提成基数，帮助销售理解每一笔订单的收益构成。",
+      stats: [
+        ["履后毛利率", "22.4%", "高于目标值"],
+        ["非销费用", "¥ 18,700", "物流与活动费用为主"],
+        ["可分提成基数", "¥ 312K", "基于已核算订单"]
+      ],
+      items: [
+        ["订单 SO2026040218", "履后毛利 ¥ 43,200，非销费用 ¥ 2,600。", "利润明细"],
+        ["订单 SO2026040189", "活动订单费用偏高，影响最终提成。", "费用偏高"],
+        ["订单 SO2026040166", "渠道订单利润稳定，可作为标准样本。", "稳定订单"],
+        ["核算说明", "提成按履后毛利和费用分摊后计算。", "计算口径"]
+      ]
+    }),
   "procurement-plan": () =>
     renderModulePage({
       title: "备货计划",
@@ -754,9 +897,17 @@ const overviewFlowConfig = [
   {
     title: "财务闭环",
     items: [
+      ["report", "report-sales"],
+      ["report", "report-finance"],
+      ["wallet", "wallet-estimate"],
+      ["wallet", "wallet-income"],
       ["finance", "finance-receivable"],
       ["finance", "finance-settlement"],
-      ["finance", "finance-expense"]
+      ["finance", "finance-expense"],
+      ["wallet", "wallet-deduction"],
+      ["wallet", "wallet-order"],
+      ["report", "report-customer"],
+      ["report", "report-product"]
     ]
   }
 ];
@@ -1092,6 +1243,178 @@ function renderModulePage({ title, intro, stats, items }) {
       </section>
     </section>
   `;
+}
+
+function renderTablePage({ title, intro, stats, columns, rows }) {
+  return `
+    <section class="module-page">
+      <article class="module-intro-card">
+        <div class="module-header">
+          <div>
+            <p class="eyebrow">Module Overview</p>
+            <h3>${title}</h3>
+          </div>
+          <span class="tag">${title}</span>
+        </div>
+        <p class="module-intro">${intro}</p>
+      </article>
+
+      <section class="overview-grid">
+        ${stats
+          .map(
+            ([label, value, meta]) => `
+              <article class="overview-card">
+                <p class="card-label">${label}</p>
+                <strong>${value}</strong>
+                <p>${meta}</p>
+              </article>
+            `
+          )
+          .join("")}
+      </section>
+
+      <article class="panel-card table-card">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                ${columns.map((column) => `<th>${column}</th>`).join("")}
+              </tr>
+            </thead>
+            <tbody>
+              ${rows
+                .map(
+                  (row) => `
+                    <tr>
+                      ${row.map((cell) => `<td>${cell}</td>`).join("")}
+                    </tr>
+                  `
+                )
+                .join("")}
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+  `;
+}
+
+function renderWalletEstimatePage() {
+  const commissionRate = 0.1;
+  const incomeColumns = ["订单号", "销售渠道", "商品名称", "销售金额", "履后毛利"];
+  const incomeData = [
+    { orderNo: "SO2026040218", channel: "大客户直销", product: "蓝莓系列组合包", sales: 128000, grossProfit: 43200 },
+    { orderNo: "SO2026040172", channel: "渠道分销", product: "基础耗材套装", sales: 86500, grossProfit: 21680 },
+    { orderNo: "SO2026040109", channel: "来福商城", product: "门诊耗材组合", sales: 42900, grossProfit: 9460 },
+    { orderNo: "SO2026040086", channel: "区域直营网", product: "妇幼专科组合", sales: 67300, grossProfit: 18920 },
+    { orderNo: "SO2026040061", channel: "渠道分销", product: "蓝莓单品包", sales: 35800, grossProfit: 8140 }
+  ];
+  const deductionColumns = ["费用类型", "单据", "扣减金额"];
+  const deductionData = [
+    { type: "负毛利扣减", document: "订单 SO2026040132", amount: 2360 },
+    { type: "非销费用分摊", document: "费用单 FY2026040211", amount: 1280 },
+    { type: "售后补发扣减", document: "售后单 SH2026040114", amount: 860 },
+    { type: "物流超支扣减", document: "费用单 FY2026040186", amount: 1120 },
+    { type: "活动物料分摊", document: "费用单 FY2026040156", amount: 1200 }
+  ];
+  const incomeRows = incomeData.map((item) => [
+    item.orderNo,
+    item.channel,
+    item.product,
+    formatCurrency(item.sales),
+    formatCurrency(item.grossProfit)
+  ]);
+  const deductionRows = deductionData.map((item) => [item.type, item.document, formatCurrency(item.amount)]);
+  const commissionIncome = incomeData.reduce((sum, item) => sum + item.grossProfit * commissionRate, 0);
+  const deductionTotal = deductionData.reduce((sum, item) => sum + item.amount, 0);
+  const estimatedTotal = commissionIncome - deductionTotal;
+
+  return `
+    <section class="module-page">
+      <section class="rule-strip">
+        <article class="rule-card rule-total">
+          <div class="rule-copy">
+            <span class="card-label">预计提成</span>
+            <strong>提成规则说明</strong>
+            <p>演示口径：每笔订单先取履后毛利，再按 10% 作为提成收入基础，最后扣减负毛利、非销费用、售后补发等影响项，得到预计提成总额。</p>
+          </div>
+          <div class="rule-result">
+            <span class="card-label">预计提成总额</span>
+            <strong>${formatCurrency(estimatedTotal)}</strong>
+            <p>${formatCurrency(commissionIncome)} 提成收入 - ${formatCurrency(deductionTotal)} 费用扣减</p>
+          </div>
+        </article>
+      </section>
+
+      <section class="table-grid-2">
+        <section class="table-section">
+          <div class="table-section-head">
+            <div class="module-header" style="margin-bottom: 0;">
+              <h3>本月预计提成收入</h3>
+            </div>
+            <span class="table-total">汇总金额：${formatCurrency(commissionIncome)}</span>
+          </div>
+          <article class="panel-card table-card">
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    ${incomeColumns.map((column) => `<th>${column}</th>`).join("")}
+                  </tr>
+                </thead>
+                <tbody>
+                  ${incomeRows
+                    .map(
+                      (row) => `
+                        <tr>
+                          ${row.map((cell) => `<td>${cell}</td>`).join("")}
+                        </tr>
+                      `
+                    )
+                    .join("")}
+                </tbody>
+              </table>
+            </div>
+          </article>
+        </section>
+
+        <section class="table-section">
+          <div class="table-section-head">
+            <div class="module-header" style="margin-bottom: 0;">
+              <h3>本月费用扣减</h3>
+            </div>
+            <span class="table-total">汇总金额：${formatCurrency(deductionTotal)}</span>
+          </div>
+          <article class="panel-card table-card">
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    ${deductionColumns.map((column) => `<th>${column}</th>`).join("")}
+                  </tr>
+                </thead>
+                <tbody>
+                  ${deductionRows
+                    .map(
+                      (row) => `
+                        <tr>
+                          ${row.map((cell) => `<td>${cell}</td>`).join("")}
+                        </tr>
+                      `
+                    )
+                    .join("")}
+                </tbody>
+              </table>
+            </div>
+          </article>
+        </section>
+      </section>
+    </section>
+  `;
+}
+
+function formatCurrency(value) {
+  return `¥ ${value.toLocaleString("zh-CN")}`;
 }
 
 mainNavItems.forEach((item) => {
