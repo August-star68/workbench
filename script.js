@@ -502,22 +502,7 @@ const contentMap = {
       ]
     }),
   "design-template": () =>
-    renderModulePage({
-      title: "设计模板",
-      intro:
-        "统一管理销售和商城常用模板，提升报价、提案和活动物料输出效率。",
-      stats: [
-        ["模板总数", "86", "本月新增 12 套"],
-        ["高频模板", "24", "报价和活动模板使用最多"],
-        ["待更新", "7", "需同步品牌素材升级"]
-      ],
-      items: [
-        ["报价模板", "适合销售报价、客户提案和商务沟通。", "常用模板"],
-        ["活动模板", "可复用到商城活动页与宣传物料。", "营销支持"],
-        ["客户提报模板", "用于大客户汇报和方案展示。", "业务支持"],
-        ["品牌素材库", "统一主视觉、图标和产品图。", "素材管理"]
-      ]
-    }),
+    renderDesignTemplatePage(),
   "design-combo": () =>
     renderModulePage({
       title: "组合图",
@@ -1295,6 +1280,92 @@ function renderTablePage({ title, intro, stats, columns, rows }) {
           </table>
         </div>
       </article>
+    </section>
+  `;
+}
+
+function renderDesignTemplatePage() {
+  return `
+    <section class="module-page">
+      <article class="module-intro-card">
+        <div class="module-header">
+          <div>
+            <p class="eyebrow">Design Center</p>
+            <h3>设计模板</h3>
+          </div>
+          <span class="tag">模板示例</span>
+        </div>
+        <p class="module-intro">统一沉淀销售提案、活动海报、商品详情和宣传封面的模板样式，方便业务快速挑选适合当前场景的设计方向。</p>
+      </article>
+
+      <section class="overview-grid">
+        <article class="overview-card">
+          <p class="card-label">模板总数</p>
+          <strong>86</strong>
+          <p>本月新增 12 套</p>
+        </article>
+        <article class="overview-card">
+          <p class="card-label">高频模板</p>
+          <strong>24</strong>
+          <p>报价与活动模板使用最多</p>
+        </article>
+        <article class="overview-card">
+          <p class="card-label">待更新</p>
+          <strong>7</strong>
+          <p>需同步品牌素材升级</p>
+        </article>
+      </section>
+
+      <section class="template-showcase-grid">
+        <article class="template-sample template-sample-poster">
+          <div class="template-badge">活动海报</div>
+          <strong>春季促销主视觉</strong>
+          <p>适合商城首页、社群传播和活动 Banner。</p>
+          <div class="template-mini-strip">
+            <span>爆品组合</span>
+            <span>限时折扣</span>
+          </div>
+        </article>
+
+        <article class="template-sample template-sample-proposal">
+          <div class="template-badge">客户提案</div>
+          <strong>KA 客户方案封面</strong>
+          <p>适合大客户汇报、解决方案演示和竞标提报。</p>
+          <div class="template-metric-stack">
+            <span>行业洞察</span>
+            <span>产品组合</span>
+            <span>收益测算</span>
+          </div>
+        </article>
+
+        <article class="template-sample template-sample-detail">
+          <div class="template-badge">详情页模块</div>
+          <strong>商品详情长图</strong>
+          <p>适合突出卖点、参数对比和应用场景展示。</p>
+          <div class="template-detail-blocks">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </article>
+      </section>
+
+      <section class="summary-grid">
+        <article class="panel-card">
+          <div class="module-header">
+            <h3>模板分类</h3>
+            <span class="tag">常用</span>
+          </div>
+          <p class="module-intro">报价模板、活动模板、客户提报模板、品牌素材库。</p>
+        </article>
+        <article class="panel-card">
+          <div class="module-header">
+            <h3>使用建议</h3>
+            <span class="tag warn">推荐</span>
+          </div>
+          <p class="module-intro">销售提案优先用封面模板，商城活动优先选海报模板，商品讲解优先选详情页模块。</p>
+        </article>
+      </section>
     </section>
   `;
 }
