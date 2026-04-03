@@ -1336,7 +1336,7 @@ function renderWalletEstimatePage() {
   const commissionIncome = incomeData.reduce((sum, item) => sum + item.grossProfit * commissionRate, 0);
   const deductionTotal = deductionData.reduce((sum, item) => sum + item.amount, 0);
   const pendingTotal = pendingData.reduce((sum, item) => sum + item.amount, 0);
-  const estimatedTotal = commissionIncome - deductionTotal;
+  const estimatedTotal = commissionIncome - deductionTotal - pendingTotal;
 
   return `
     <section class="module-page">
@@ -1350,7 +1350,7 @@ function renderWalletEstimatePage() {
           <div class="rule-result">
             <span class="card-label">预计提成总额</span>
             <strong>${formatCurrency(estimatedTotal)}</strong>
-            <p>${formatCurrency(commissionIncome)} 提成收入 - ${formatCurrency(deductionTotal)} 费用扣减</p>
+            <p>${formatCurrency(commissionIncome)} 提成收入 - ${formatCurrency(deductionTotal)} 提成扣减 - ${formatCurrency(pendingTotal)} 提成缓发</p>
           </div>
         </article>
       </section>
