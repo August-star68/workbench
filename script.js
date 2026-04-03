@@ -1317,6 +1317,13 @@ function renderWalletEstimatePage() {
     { type: "物流超支扣减", document: "费用单 FY2026040186", amount: 1120 },
     { type: "活动物料分摊", document: "费用单 FY2026040156", amount: 1200 }
   ];
+  const pendingColumns = ["缓发类型", "单据", "金额"];
+  const pendingData = [
+    { type: "回款未完成缓发", document: "订单 SO2026040226", amount: 2580 },
+    { type: "售后未关闭缓发", document: "订单 SO2026040198", amount: 1160 },
+    { type: "异常利润复核缓发", document: "订单 SO2026040163", amount: 980 },
+    { type: "渠道返点待确认", document: "订单 SO2026040122", amount: 1420 }
+  ];
   const incomeRows = incomeData.map((item) => [
     item.orderNo,
     item.channel,
@@ -1325,8 +1332,10 @@ function renderWalletEstimatePage() {
     formatCurrency(item.grossProfit)
   ]);
   const deductionRows = deductionData.map((item) => [item.type, item.document, formatCurrency(item.amount)]);
+  const pendingRows = pendingData.map((item) => [item.type, item.document, formatCurrency(item.amount)]);
   const commissionIncome = incomeData.reduce((sum, item) => sum + item.grossProfit * commissionRate, 0);
   const deductionTotal = deductionData.reduce((sum, item) => sum + item.amount, 0);
+  const pendingTotal = pendingData.reduce((sum, item) => sum + item.amount, 0);
   const estimatedTotal = commissionIncome - deductionTotal;
 
   return `
@@ -1395,6 +1404,37 @@ function renderWalletEstimatePage() {
                 </thead>
                 <tbody>
                   ${deductionRows
+                    .map(
+                      (row) => `
+                        <tr>
+                          ${row.map((cell) => `<td>${cell}</td>`).join("")}
+                        </tr>
+                      `
+                    )
+                    .join("")}
+                </tbody>
+              </table>
+            </div>
+          </article>
+        </section>
+
+        <section class="table-section">
+          <div class="table-section-head">
+            <div class="module-header" style="margin-bottom: 0;">
+              <h3>提成缓发</h3>
+            </div>
+            <span class="table-total">汇总金额：${formatCurrency(pendingTotal)}</span>
+          </div>
+          <article class="panel-card table-card">
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    ${pendingColumns.map((column) => `<th>${column}</th>`).join("")}
+                  </tr>
+                </thead>
+                <tbody>
+                  ${pendingRows
                     .map(
                       (row) => `
                         <tr>
