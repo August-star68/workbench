@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>销售工作台</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-mark">SRM</div>
+          <div>
+            <p class="brand-kicker">Sales Resource Matrix</p>
+            <h1>销售工作台</h1>
+          </div>
+        </div>
+        <div class="topbar-meta">
+          <div class="avatar">苏</div>
+        </div>
+      </header>
+
+      <nav class="main-nav" aria-label="一级导航">
+        <button class="main-nav-item active" data-menu="workbench">工作台</button>
+        <button class="main-nav-item" data-menu="customer">客户管理</button>
+        <button class="main-nav-item" data-menu="tender">投标管理</button>
+        <button class="main-nav-item" data-menu="business">业务管理</button>
+        <button class="main-nav-item" data-menu="bidding">竞价平台</button>
+        <button class="main-nav-item" data-menu="fulfillment">订单履约</button>
+        <button class="main-nav-item" data-menu="design">设计中心</button>
+        <button class="main-nav-item" data-menu="mall">来福商城</button>
+        <button class="main-nav-item" data-menu="finance">财务管理</button>
+        <button id="overview-trigger" class="overview-trigger" type="button">功能全览</button>
+      </nav>
+      <div id="nav-dropdown" class="nav-dropdown" aria-label="二级导航下拉"></div>
+      <section id="function-overview" class="function-overview" aria-label="功能全览">
+        <div class="function-overview-head">
+          <div>
+            <p class="eyebrow">Business Flow</p>
+            <h2 class="section-title">功能全览</h2>
+          </div>
+          <button id="overview-close" class="overview-close" type="button">收起</button>
+        </div>
+        <div id="overview-content" class="overview-content"></div>
+      </section>
+
+      <main class="layout">
+        <section class="content-panel content-panel-full">
+          <div class="content-topbar">
+            <div id="breadcrumb" class="breadcrumb">工作台 / 首页概览</div>
+          </div>
+          <div id="page-content"></div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
