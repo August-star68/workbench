@@ -113,24 +113,48 @@
 
                     <div class="metrics-grid">
                       <article class="metric-tile">
-                        <span class="metric-label">今日销售额</span>
+                        <div class="metric-topline">
+                          <span class="metric-label">今日销售额</span>
+                          <span class="metric-chip">销</span>
+                        </div>
                         <strong>¥ 286,000</strong>
-                        <em class="metric-trend up">较昨日 +12%</em>
+                        <div class="metric-bottomline">
+                          <em class="metric-trend up">较昨日 +12%</em>
+                          <span class="metric-meta">目标进度 81%</span>
+                        </div>
                       </article>
                       <article class="metric-tile">
-                        <span class="metric-label">今日出库额</span>
+                        <div class="metric-topline">
+                          <span class="metric-label">今日出库额</span>
+                          <span class="metric-chip">库</span>
+                        </div>
                         <strong>¥ 198,000</strong>
-                        <em class="metric-trend up">按计划推进</em>
+                        <div class="metric-bottomline">
+                          <em class="metric-trend up">按计划推进</em>
+                          <span class="metric-meta">已出 24 单</span>
+                        </div>
                       </article>
                       <article class="metric-tile alert">
-                        <span class="metric-label">异常订单数</span>
+                        <div class="metric-topline">
+                          <span class="metric-label">异常订单数</span>
+                          <span class="metric-chip alert">异</span>
+                        </div>
                         <strong>07</strong>
-                        <em class="metric-trend down">3 单待人工处理</em>
+                        <div class="metric-bottomline">
+                          <em class="metric-trend down">3 单待人工处理</em>
+                          <span class="metric-meta">超时 2 单</span>
+                        </div>
                       </article>
                       <article class="metric-tile soft">
-                        <span class="metric-label">欠款金额</span>
+                        <div class="metric-topline">
+                          <span class="metric-label">欠款金额</span>
+                          <span class="metric-chip soft">款</span>
+                        </div>
                         <strong>¥ 64,300</strong>
-                        <em class="metric-trend neutral">2 家客户待回款</em>
+                        <div class="metric-bottomline">
+                          <em class="metric-trend neutral">2 家客户待回款</em>
+                          <span class="metric-meta">临期 1 家</span>
+                        </div>
                       </article>
                     </div>
                   </section>
@@ -146,23 +170,41 @@
 
                     <div class="list-stack">
                       <article class="list-card">
-                        <div class="list-main">
-                          <strong>订单价格调整申请</strong>
-                          <p>提交时间 09:20，待销售经理审核</p>
+                        <div class="list-main compact">
+                          <div class="list-line">
+                            <strong>订单价格调整申请</strong>
+                            <span class="list-code">NO.001</span>
+                          </div>
+                          <div class="list-subline">
+                            <span>09:20 提交</span>
+                            <span>当前节点 销售经理</span>
+                          </div>
                         </div>
                         <span class="list-status waiting">待审核</span>
                       </article>
                       <article class="list-card">
-                        <div class="list-main">
-                          <strong>客户授信额度变更</strong>
-                          <p>提交时间 昨日 18:40，待财务复核</p>
+                        <div class="list-main compact">
+                          <div class="list-line">
+                            <strong>客户授信额度变更</strong>
+                            <span class="list-code">NO.002</span>
+                          </div>
+                          <div class="list-subline">
+                            <span>昨日 18:40</span>
+                            <span>当前节点 财务复核</span>
+                          </div>
                         </div>
                         <span class="list-status waiting">待审核</span>
                       </article>
                       <article class="list-card">
-                        <div class="list-main">
-                          <strong>出库异常说明单</strong>
-                          <p>提交时间 昨日 16:12，待运营确认处理结果</p>
+                        <div class="list-main compact">
+                          <div class="list-line">
+                            <strong>出库异常说明单</strong>
+                            <span class="list-code">NO.003</span>
+                          </div>
+                          <div class="list-subline">
+                            <span>昨日 16:12</span>
+                            <span>当前节点 运营确认</span>
+                          </div>
                         </div>
                         <span class="list-status processing">处理中</span>
                       </article>
