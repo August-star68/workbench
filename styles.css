@@ -276,14 +276,14 @@ button {
 .app-shell {
   position: relative;
   z-index: 2;
-  padding: 6px 16px 18px;
+  padding: 4px 14px 16px;
 }
 
 .home-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 14px;
+  gap: 10px;
   margin-top: 0;
 }
 
@@ -296,8 +296,8 @@ button {
 }
 
 .home-header h2 {
-  margin: 6px 0 0;
-  font-size: 1.75rem;
+  margin: 4px 0 0;
+  font-size: 1.62rem;
   line-height: 1;
 }
 
@@ -305,10 +305,10 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  margin-top: 14px;
-  padding: 14px 16px;
-  border-radius: 22px;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 20px;
   background: linear-gradient(135deg, rgba(24, 49, 79, 0.97), rgba(17, 124, 136, 0.92));
   color: #fff;
   box-shadow: var(--shadow);
@@ -316,8 +316,8 @@ button {
 
 .user-banner strong {
   display: block;
-  font-size: 0.96rem;
-  line-height: 1.4;
+  font-size: 0.9rem;
+  line-height: 1.35;
 }
 
 .banner-tip {
@@ -329,9 +329,9 @@ button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 8px 12px;
+  padding: 7px 10px;
   border-radius: 999px;
-  font-size: 0.76rem;
+  font-size: 0.72rem;
   font-weight: 700;
   white-space: nowrap;
 }
@@ -339,25 +339,27 @@ button {
 .banner-badge {
   background: rgba(255, 255, 255, 0.12);
   color: #fff;
-  padding: 7px 11px;
+  padding: 6px 9px;
 }
 
 .mode-switch {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-  margin-top: 14px;
-  padding: 5px;
-  border-radius: 18px;
+  display: inline-grid;
+  grid-template-columns: repeat(2, auto);
+  gap: 6px;
+  margin-top: 10px;
+  padding: 4px;
+  border-radius: 16px;
   background: rgba(255, 255, 255, 0.68);
   border: 1px solid rgba(255, 255, 255, 0.7);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
 }
 
 .mode-pill {
-  padding: 10px 12px;
+  min-width: 76px;
+  padding: 7px 10px;
   border: 0;
-  border-radius: 14px;
+  border-radius: 12px;
+  font-size: 0.78rem;
   color: var(--muted);
   background: transparent;
   cursor: pointer;
@@ -367,7 +369,7 @@ button {
 .mode-pill.active {
   color: #fff;
   background: linear-gradient(135deg, var(--gold), #d66b53);
-  box-shadow: 0 10px 22px rgba(214, 107, 83, 0.26);
+  box-shadow: 0 8px 18px rgba(214, 107, 83, 0.22);
 }
 
 .mode-pill:hover {
@@ -375,7 +377,7 @@ button {
 }
 
 .mode-panels {
-  margin-top: 12px;
+  margin-top: 10px;
 }
 
 .mode-panel {
@@ -413,9 +415,9 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  padding: 16px;
-  border-radius: 24px;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 22px;
   box-shadow: 0 18px 36px rgba(23, 32, 51, 0.08);
 }
 
@@ -432,23 +434,23 @@ button {
 }
 
 .hero-copy h3 {
-  margin: 6px 0;
-  font-size: 1.08rem;
+  margin: 4px 0;
+  font-size: 1rem;
 }
 
 .hero-copy p:last-child {
   margin: 0;
   color: var(--muted);
-  font-size: 0.84rem;
-  line-height: 1.6;
+  font-size: 0.78rem;
+  line-height: 1.5;
 }
 
 .progress-ring {
   --progress-angle: calc(var(--progress) * 1%);
   display: grid;
   place-items: center;
-  width: 96px;
-  height: 96px;
+  width: 88px;
+  height: 88px;
   border-radius: 50%;
   background:
     radial-gradient(circle closest-side, rgba(255, 255, 255, 0.95) 74%, transparent 75%),
@@ -459,23 +461,23 @@ button {
 .progress-ring div {
   display: grid;
   text-align: center;
-  gap: 4px;
+  gap: 2px;
 }
 
 .progress-ring strong {
-  font-size: 1.22rem;
+  font-size: 1.1rem;
   line-height: 1;
 }
 
 .progress-ring span {
-  font-size: 0.68rem;
+  font-size: 0.62rem;
   color: var(--muted);
 }
 
 .content-section {
-  margin-top: 12px;
-  padding: 14px;
-  border-radius: 20px;
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 18px;
   box-shadow: 0 16px 30px rgba(23, 32, 51, 0.06);
 }
 
@@ -483,13 +485,13 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 12px;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
 .section-head h3 {
   margin: 4px 0 0;
-  font-size: 1rem;
+  font-size: 0.94rem;
 }
 
 .section-tag {
@@ -505,12 +507,12 @@ button {
 .metrics-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
+  gap: 8px;
 }
 
 .metric-tile {
-  padding: 13px 12px;
-  border-radius: 16px;
+  padding: 11px 10px;
+  border-radius: 14px;
 }
 
 .metric-tile.soft {
@@ -523,19 +525,19 @@ button {
 
 .metric-label {
   display: block;
-  font-size: 0.82rem;
+  font-size: 0.76rem;
   color: var(--muted);
 }
 
 .metric-tile strong {
   display: block;
-  margin: 6px 0 4px;
-  font-size: 1.08rem;
+  margin: 5px 0 3px;
+  font-size: 1rem;
 }
 
 .metric-trend {
   font-style: normal;
-  font-size: 0.74rem;
+  font-size: 0.7rem;
 }
 
 .metric-trend.up {
@@ -553,7 +555,7 @@ button {
 .list-stack,
 .notice-stack {
   display: grid;
-  gap: 8px;
+  gap: 7px;
 }
 
 .list-card,
@@ -561,31 +563,31 @@ button {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 12px;
-  padding: 12px;
-  border-radius: 16px;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 14px;
 }
 
 .list-main strong,
 .notice-card strong {
   display: block;
-  font-size: 0.9rem;
+  font-size: 0.84rem;
   line-height: 1.45;
 }
 
 .list-main p,
 .notice-card p {
   margin: 4px 0 0;
-  font-size: 0.78rem;
-  line-height: 1.55;
+  font-size: 0.74rem;
+  line-height: 1.5;
   color: var(--muted);
 }
 
 .list-status {
   flex-shrink: 0;
-  padding: 6px 9px;
+  padding: 5px 8px;
   border-radius: 999px;
-  font-size: 0.68rem;
+  font-size: 0.64rem;
   font-weight: 700;
 }
 
@@ -605,17 +607,17 @@ button {
 }
 
 .notice-card {
-  gap: 10px;
+  gap: 8px;
 }
 
 .notice-dot {
   display: inline-block;
-  width: 8px;
-  height: 8px;
-  margin-top: 5px;
+  width: 7px;
+  height: 7px;
+  margin-top: 4px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--gold), var(--red));
-  box-shadow: 0 0 0 5px rgba(235, 145, 85, 0.12);
+  box-shadow: 0 0 0 4px rgba(235, 145, 85, 0.12);
   flex-shrink: 0;
 }
 
@@ -624,10 +626,10 @@ button {
   bottom: 0;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-  margin-top: 14px;
-  padding: 10px;
-  border-radius: 20px;
+  gap: 6px;
+  margin-top: 12px;
+  padding: 8px;
+  border-radius: 18px;
   background: rgba(255, 255, 255, 0.92);
   border: 1px solid rgba(255, 255, 255, 0.8);
   box-shadow: 0 -8px 22px rgba(23, 32, 51, 0.06);
@@ -636,10 +638,11 @@ button {
 .tab-item {
   display: grid;
   justify-items: center;
-  gap: 5px;
-  padding: 9px 8px;
+  gap: 4px;
+  padding: 8px 6px;
   border: 0;
-  border-radius: 16px;
+  border-radius: 14px;
+  font-size: 0.78rem;
   color: var(--muted);
   background: transparent;
   cursor: pointer;
