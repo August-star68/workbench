@@ -1638,6 +1638,31 @@ button {
   gap: 8px;
 }
 
+.home-quick-nav {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-height: 0;
+}
+
+.home-quick-link {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--teal);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(78, 205, 196, 0.35);
+  padding-bottom: 1px;
+}
+
+.home-quick-link:hover {
+  color: var(--coral);
+  border-bottom-color: rgba(255, 107, 107, 0.45);
+}
+
+#home-market-dynamics {
+  scroll-margin-top: 96px;
+}
+
 .home-row {
   display: grid;
   gap: 8px;
