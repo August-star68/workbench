@@ -692,14 +692,17 @@ function buildManagerStats() {
   ];
 }
 
-function buildManagerModuleView(groups) {
+function buildManagerApprovalModuleView(groups) {
   return groups.map((g) => ({
     ...g,
-    todos: (g.todos || []).map((t, i) => ({
-      ...t,
-      title: `${t.title}${i === 0 ? " · 重点" : ""}`,
-      text: `${t.text}（团队协同）`
-    })),
+    todos: (g.todos || [])
+      .slice(0, 2)
+      .map((t, i) => ({
+        ...t,
+        title: `待审批 · ${t.title}${i === 0 ? "（优先）" : ""}`,
+        text: `${t.text}（需管理者审批）`,
+        badge: "审批"
+      })),
     messages: (g.messages || []).map((m) => ({
       ...m,
       title: `${m.title} · 团队`,
@@ -1672,7 +1675,7 @@ function renderFlowchartSection() {
   `;
 }
 
-const homeChartInstances = { line: null, pie: null, bar: null };
+const homeChartInstances = { line: null, pie: null, gross: null };
 
 function destroyHomeCharts() {
   Object.keys(homeChartInstances).forEach((key) => {
@@ -1690,8 +1693,8 @@ function initHomeWorkbenchCharts() {
   }
   const lineEl = document.getElementById("home-chart-line");
   const pieEl = document.getElementById("home-chart-pie");
-  const barEl = document.getElementById("home-chart-bar");
-  if (!lineEl && !pieEl && !barEl) {
+  const grossEl = document.getElementById("home-chart-gross");
+  if (!lineEl && !pieEl && !grossEl) {
     return;
   }
 
@@ -1779,36 +1782,40 @@ function initHomeWorkbenchCharts() {
     });
   }
 
-  if (barEl) {
-    homeChartInstances.bar = new Chart(barEl, {
-      type: "bar",
+  if (grossEl) {
+    homeChartInstances.gross = new Chart(grossEl, {
+      type: "line",
       data: {
-        labels: ["第1周", "第2周", "第3周", "第4周"],
+        labels: ["3/8", "3/15", "3/22", "3/29", "4/5", "4/7"],
         datasets: [
           {
-            label: "中标商品数（SKU）",
-            data: [12, 19, 15, 22],
-            backgroundColor: "rgba(78, 205, 196, 0.85)",
-            borderRadius: 4,
-            borderSkipped: false
+            label: "毛利额（万元）",
+            data: [36, 41, 39, 46, 52, 55],
+            borderColor: "rgb(255, 107, 107)",
+            backgroundColor: "rgba(255, 107, 107, 0.16)",
+            fill: true,
+            tension: 0.35,
+            pointRadius: 3,
+            pointHoverRadius: 5
           }
         ]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        interaction: { intersect: false, mode: "index" },
         plugins: {
-          legend: { display: false },
+          legend: { display: true, position: "bottom", labels: { boxWidth: 10, font: { size: 11 } } },
           tooltip: {
             callbacks: {
-              label: (ctx) => `中标 ${ctx.parsed.y} 个 SKU`
+              label: (ctx) => `${ctx.dataset.label || ""}: ${ctx.parsed.y} 万`
             }
           }
         },
         scales: {
           y: {
-            beginAtZero: true,
-            ticks: { stepSize: 5, font: { size: 10 } },
+            beginAtZero: false,
+            ticks: { font: { size: 10 } },
             grid: { color: "rgba(31, 42, 48, 0.06)" }
           },
           x: {
@@ -2297,10 +2304,11 @@ function renderHomePage() {
   const workbenchView = getHomeWorkbenchView();
   const isManagerView = workbenchView === "manager";
   const metrics = isManagerView ? buildManagerStats() : homeStats;
-  const moduleView = isManagerView ? buildManagerModuleView(homeByModule) : homeByModule;
+  const moduleView = isManagerView ? buildManagerApprovalModuleView(homeByModule) : homeByModule;
   const showCore = enabled.has("coreMetrics");
   const showTodos = enabled.has("todos");
   const showNotices = enabled.has("notices");
+  const showNoticeInView = showNotices && !isManagerView;
   const showInventoryBacklog = enabled.has("inventoryBacklog");
   const showInventoryShortage = enabled.has("inventoryShortage");
   const showProductStats = enabled.has("productStats");
@@ -2325,6 +2333,14 @@ function renderHomePage() {
               <canvas id="home-chart-pie" role="img" aria-label="当前库存分类占比饼图"></canvas>
             </div>
           </article>`
+      : "",
+    isManagerView
+      ? `<article class="home-chart-card">
+            <h4 class="home-chart-title">近1个月毛利额</h4>
+            <div class="home-chart-canvas-wrap">
+              <canvas id="home-chart-gross" role="img" aria-label="近1个月毛利额折线图"></canvas>
+            </div>
+          </article>`
       : ""
   ]
     .filter(Boolean)
@@ -2346,7 +2362,7 @@ function renderHomePage() {
   const todoCard = showTodos
     ? `<section class="home-section home-section--compact home-todos">
           <div class="panel-head">
-            <h3>${isManagerView ? "团队待办" : "我的待办"}</h3>
+            <h3>${isManagerView ? "待我审批" : "我的待办"}</h3>
             <span class="pill warn">按模块</span>
           </div>
           <div class="home-module-grid home-module-grid--dense">
@@ -2355,10 +2371,10 @@ function renderHomePage() {
         </section>`
     : "";
 
-  const noticeCard = showNotices
+  const noticeCard = showNoticeInView
     ? `<section class="home-section home-section--compact home-col home-notice-col">
           <div class="panel-head">
-            <h3>${isManagerView ? "团队通知" : "系统通知"}</h3>
+            <h3>系统通知</h3>
             <span class="pill">按模块</span>
           </div>
           <div class="home-module-grid home-module-grid--dense">
@@ -2387,17 +2403,21 @@ function renderHomePage() {
       </div>`
     : "";
 
-  const quickActions = `
+  const viewSwitchSection = `
+    <section class="home-section home-section--compact home-view-section">
+      <div class="home-view-switch" role="tablist" aria-label="工作台视角切换">
+        <button type="button" class="home-view-btn ${!isManagerView ? "is-active" : ""}" data-home-view="personal">采购个人</button>
+        <button type="button" class="home-view-btn ${isManagerView ? "is-active" : ""}" data-home-view="manager">采购管理者</button>
+      </div>
+    </section>
+  `;
+
+  const quickActions = !isManagerView
+    ? `
     <section class="home-section home-section--compact home-quick-actions">
       <div class="panel-head">
-        <div class="home-head-left">
-          <h3>快捷操作</h3>
-          <span class="pill">常用入口</span>
-        </div>
-        <div class="home-view-switch" role="tablist" aria-label="工作台视角切换">
-          <button type="button" class="home-view-btn ${!isManagerView ? "is-active" : ""}" data-home-view="personal">采购个人</button>
-          <button type="button" class="home-view-btn ${isManagerView ? "is-active" : ""}" data-home-view="manager">采购管理者</button>
-        </div>
+        <h3>快捷操作</h3>
+        <span class="pill">常用入口</span>
       </div>
       <div class="home-quick-actions-grid">
         ${homeQuickActions
@@ -2416,10 +2436,12 @@ function renderHomePage() {
           .join("")}
       </div>
     </section>
-  `;
+  `
+    : "";
 
   return `
     <section class="home-page">
+      ${viewSwitchSection}
       ${quickActions}
       ${coreTodoRow}
       ${chartNoticeRow}

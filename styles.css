@@ -1729,6 +1729,12 @@ button {
   gap: 8px;
 }
 
+.home-view-section {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
 .home-view-switch {
   display: inline-flex;
   gap: 4px;
