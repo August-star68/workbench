@@ -1741,10 +1741,40 @@ const HOME_WIDGETS = [
   { id: "chartBar", label: "近期竞价中标", defaultOn: true }
 ];
 
+const HOME_WIDGETS_STORAGE_KEY = "homeWorkbenchWidgetsV2";
+const HOME_WIDGETS_LEGACY_KEY = "homeWorkbenchWidgetsV1";
+
+/** One-time rollout: new defaultOn widgets (e.g. marketInfo) merge into legacy V1 saves only. */
+function mergeDefaultOnIntoSet(set) {
+  for (const w of HOME_WIDGETS) {
+    if (w.defaultOn && !set.has(w.id)) {
+      set.add(w.id);
+    }
+  }
+}
+
 function getHomeWidgetState() {
-  const key = "homeWorkbenchWidgetsV1";
   try {
-    const raw = localStorage.getItem(key);
+    let raw = localStorage.getItem(HOME_WIDGETS_STORAGE_KEY);
+    if (!raw) {
+      const legacy = localStorage.getItem(HOME_WIDGETS_LEGACY_KEY);
+      if (legacy) {
+        try {
+          const arr = JSON.parse(legacy);
+          const set = new Set(Array.isArray(arr) ? arr.filter((x) => typeof x === "string") : []);
+          mergeDefaultOnIntoSet(set);
+          saveHomeWidgetState(Array.from(set));
+        } catch {
+          /* fall through */
+        }
+        try {
+          localStorage.removeItem(HOME_WIDGETS_LEGACY_KEY);
+        } catch {
+          /* ignore */
+        }
+        raw = localStorage.getItem(HOME_WIDGETS_STORAGE_KEY);
+      }
+    }
     if (!raw) {
       return new Set(HOME_WIDGETS.filter((w) => w.defaultOn).map((w) => w.id));
     }
@@ -1759,18 +1789,17 @@ function getHomeWidgetState() {
 }
 
 function saveHomeWidgetState(ids) {
-  const key = "homeWorkbenchWidgetsV1";
   try {
-    localStorage.setItem(key, JSON.stringify(ids));
+    localStorage.setItem(HOME_WIDGETS_STORAGE_KEY, JSON.stringify(ids));
   } catch {
     /* ignore */
   }
 }
 
 function resetHomeWidgetState() {
-  const key = "homeWorkbenchWidgetsV1";
   try {
-    localStorage.removeItem(key);
+    localStorage.removeItem(HOME_WIDGETS_STORAGE_KEY);
+    localStorage.removeItem(HOME_WIDGETS_LEGACY_KEY);
   } catch {
     /* ignore */
   }
@@ -1812,13 +1841,26 @@ function renderHomeCustomizeModal(enabledSet) {
   `;
 }
 
+const HOME_WIDGETS_MODAL_REV = HOME_WIDGETS.map((w) => w.id).join("|");
+
 function ensureHomeCustomizeModal() {
   let host = document.getElementById("home-customize-modal");
+  const stale =
+    host &&
+    (host.dataset.widgetsRev !== HOME_WIDGETS_MODAL_REV ||
+      host.querySelectorAll(".home-customize-check").length !== HOME_WIDGETS.length);
+  if (stale && host) {
+    host.parentNode?.remove();
+    host = null;
+  }
   if (!host) {
     const wrap = document.createElement("div");
     wrap.innerHTML = renderHomeCustomizeModal(getHomeWidgetState());
     document.body.appendChild(wrap);
     host = document.getElementById("home-customize-modal");
+    if (host) {
+      host.dataset.widgetsRev = HOME_WIDGETS_MODAL_REV;
+    }
   } else {
     // Refresh checked state to current storage
     const enabled = getHomeWidgetState();
@@ -2284,6 +2326,8 @@ function renderHomePage() {
           : ""
       }
 
+      ${showMarketInfo ? renderHomeMarketInfo() : ""}
+
       ${
         charts
           ? `<section class="home-section home-section--compact home-charts-wrap" aria-label="统计图示">
@@ -2327,8 +2371,6 @@ function renderHomePage() {
       </div>`
           : ""
       }
-
-      ${showMarketInfo ? renderHomeMarketInfo() : ""}
     </section>
   `;
 }
