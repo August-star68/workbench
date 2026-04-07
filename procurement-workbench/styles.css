@@ -1721,6 +1721,32 @@ button {
   font-size: 0.78rem;
 }
 
+.home-quick-actions .panel-head {
+  margin-bottom: 8px;
+}
+
+.home-quick-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.home-quick-action-btn {
+  border: 1px solid rgba(78, 205, 196, 0.34);
+  background: linear-gradient(135deg, rgba(78, 205, 196, 0.14), rgba(255, 255, 255, 0.95));
+  color: var(--text);
+  border-radius: 10px;
+  min-height: 36px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.home-quick-action-btn:hover {
+  border-color: rgba(255, 107, 107, 0.4);
+  color: #0b1320;
+}
+
 .home-charts-wrap {
   padding-top: 8px;
 }

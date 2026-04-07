@@ -620,6 +620,13 @@ const homeStats = [
   { label: "今日客诉单量", value: "14", trend: "较昨日 -2 单", trendClass: "up" }
 ];
 
+const homeQuickActions = [
+  { id: "create-product", label: "新建商品", menu: "product", page: "material-master" },
+  { id: "create-po", label: "新建采购单", menu: "procurement", page: "po-board" },
+  { id: "bid-taking", label: "竞价接单", menu: "bidding", page: "bidding-hall" },
+  { id: "stock-audit", label: "备货审核", menu: "sales", page: "allocation" }
+];
+
 const homeInventoryAlert = {
   backlog: {
     title: "库存积压",
@@ -2340,8 +2347,34 @@ function renderHomePage() {
       </div>`
     : "";
 
+  const quickActions = `
+    <section class="home-section home-section--compact home-quick-actions">
+      <div class="panel-head">
+        <h3>快捷操作</h3>
+        <span class="pill">常用入口</span>
+      </div>
+      <div class="home-quick-actions-grid">
+        ${homeQuickActions
+          .map(
+            (a) => `
+          <button
+            type="button"
+            class="home-quick-action-btn"
+            data-quick-action="${a.id}"
+            data-menu="${a.menu}"
+            data-page="${a.page}"
+          >
+            ${a.label}
+          </button>`
+          )
+          .join("")}
+      </div>
+    </section>
+  `;
+
   return `
     <section class="home-page">
+      ${quickActions}
       ${coreTodoRow}
       ${chartNoticeRow}
 
@@ -2739,6 +2772,19 @@ document.addEventListener("click", (event) => {
     event.preventDefault();
     const modal = ensureHomeCustomizeModal();
     if (modal) modal.hidden = false;
+    return;
+  }
+  const quickAction = event.target.closest(".home-quick-action-btn");
+  if (quickAction) {
+    event.preventDefault();
+    const targetMenu = quickAction.dataset.menu;
+    const targetPage = quickAction.dataset.page;
+    if (targetMenu && menuConfig[targetMenu]) {
+      activeMenu = targetMenu;
+      const pages = menuConfig[targetMenu].pages;
+      activePage = targetPage && pages.some((p) => p.id === targetPage) ? targetPage : pages[0]?.id || null;
+      render();
+    }
     return;
   }
 });
