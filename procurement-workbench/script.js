@@ -2317,7 +2317,7 @@ function renderHomePage() {
   const showLine = enabled.has("chartLine");
   const showPie = enabled.has("chartPie");
 
-  const charts = [
+  const chartCards = [
     showLine
       ? `<article class="home-chart-card">
             <h4 class="home-chart-title">近1个月采购额</h4>
@@ -2342,9 +2342,10 @@ function renderHomePage() {
             </div>
           </article>`
       : ""
-  ]
-    .filter(Boolean)
-    .join("");
+  ].filter(Boolean);
+  const charts = chartCards.join("");
+  const chartsClass =
+    isManagerView && chartCards.length >= 3 ? "home-charts-col home-charts-col--triple" : "home-charts-col";
 
   const coreCard = showCore
     ? `<section class="home-section home-section--compact home-kpi">
@@ -2395,7 +2396,7 @@ function renderHomePage() {
         ${
           charts
             ? `<section class="home-section home-section--compact home-charts-wrap" aria-label="统计图示">
-        <div class="home-charts-col">${charts}</div>
+        <div class="${chartsClass}">${charts}</div>
       </section>`
             : ""
         }
