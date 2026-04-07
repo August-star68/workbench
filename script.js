@@ -1,11 +1,4 @@
 const menuConfig = {
-  overview: {
-    title: "采购总览",
-    pages: [
-      { id: "cockpit", label: "采购驾驶舱", desc: "先看风险，再推进执行" },
-      { id: "daily-pulse", label: "今日节奏", desc: "把晨会、催交、收口排清楚" }
-    ]
-  },
   sourcing: {
     title: "寻源定价",
     pages: [
@@ -50,49 +43,125 @@ const menuConfig = {
   }
 };
 
-const modulePages = {
-  "daily-pulse": {
-    kicker: "Daily Pulse",
-    title: "今日节奏",
-    intro:
-      "采购每天最怕信息顺序错了。这个页面把审批、催交、异常收口拆成三个时段，确保先处理会影响停线和交期的事项，再去做询价和例行沟通。",
-    facts: ["09:00 晨会同步", "12:00 审批截点", "16:30 异常收口"],
-    stats: [
-      { label: "今日会议", value: "6", trend: "跨部门 3 场", trendClass: "up" },
-      { label: "催交单", value: "18", trend: "高优 5 单", trendClass: "down" },
-      { label: "待审批", value: "12", trend: "超 2 小时 4 单", trendClass: "down" },
-      { label: "已闭环异常", value: "11", trend: "比昨日多 3 项", trendClass: "up" }
-    ],
-    focus: [
-      { badge: "08:30", tone: "success", title: "晨会先看缺料清单", text: "生产计划、仓库和采购同步今日停线风险，确认 3 个物料是否需要改走紧急采购。" },
-      { badge: "13:00", tone: "warn", title: "午间追回标结果", text: "对今日截止的 9 家供应商询价统一确认回标状态，不让报价窗口自然过期。" },
-      { badge: "17:00", tone: "danger", title: "收口差异与退货", text: "把到货差异、质检不合格和发票缺失三类问题收拢，避免拖到次日形成跨天积压。" }
-    ],
-    boardTitle: "本日执行看板",
-    board: [
-      { title: "紧急补单审批", text: "包材 B-210 因产线切换追加 2,000 套，需 10:30 前放行。", badge: "高优", tone: "danger" },
-      { title: "华南仓到货预约", text: "4 张 ASN 集中在 14:00-16:00 抵达，仓库已要求分时段卸货。", badge: "协同", tone: "warn" },
-      { title: "模切外协询价", text: "第二轮回标还差 2 家，建议在 11:00 前电话催回。", badge: "询价", tone: "success" },
-      { title: "月结供应商对账", text: "星海包装差异 1.8 万元，需采购和仓库共同确认收货数量。", badge: "对账", tone: "warn" }
-    ],
-    listTitle: "协同清单",
-    list: [
-      { title: "生产计划变更", text: "下午将追加一批出口订单，采购需提前锁定胶膜和标签供应。", badge: "PMC", tone: "success" },
-      { title: "品质复判", text: "昨日 IQC 拒收的端盖需今天 15:00 前完成复判结论。", badge: "IQC", tone: "warn" },
-      { title: "法务催签", text: "新供应商保密协议仍未回传盖章件，影响明日询价发出。", badge: "合同", tone: "danger" },
-      { title: "财务补票提醒", text: "两家月结供应商发票未齐，若本周未补齐将顺延付款。", badge: "AP", tone: "warn" }
-    ],
-    tableCaption: "本日关键节点",
-    table: {
-      columns: ["时间", "事项", "对象", "当前动作", "责任人"],
-      rows: [
-        ["09:00", "晨会同步", "停线风险清单", "确认紧急采购策略", "王采"],
-        ["11:00", "回标催收", "模切外协 RFQ-219", "二轮报价补齐", "周宁"],
-        ["14:30", "收货协同", "华南仓 ASN 批次", "分时段预约到仓", "沈洁"],
-        ["16:30", "异常收口", "IQC / 对账差异", "归档次日跟进单", "采购共享中心"]
-      ]
-    }
+const homeStats = [
+  { label: "今日采购额", value: "¥ 186.4万", trend: "较昨日 +8.3%", trendClass: "up" },
+  { label: "今日销售额", value: "¥ 241.7万", trend: "产销比 77.1%", trendClass: "up" },
+  { label: "异常单量", value: "17", trend: "交期异常 9 单", trendClass: "down" },
+  { label: "我的待办", value: "11", trend: "今日新增 6 项", trendClass: "warn" }
+];
+
+const homeInventoryAlert = {
+  backlog: {
+    title: "库存积压",
+    value: "24",
+    hint: "SKU 库龄偏高或可动销不足，占用资金",
+    rows: [
+      { name: "B-210 包材套件", detail: "华东主仓", meta: "库龄 112 天 · 12,400 套" },
+      { name: "五金紧固件 M8", detail: "华南中心仓", meta: "周转 <0.3 次/季 · 8.6 万件" },
+      { name: "辅料托盘衬板", detail: "华东", meta: "超最高库存线 18%" }
+    ]
   },
+  shortage: {
+    title: "库存缺失",
+    value: "11",
+    hint: "低于安全库存或存在停线 / 欠料风险",
+    rows: [
+      { name: "注塑端盖", detail: "主供仓", meta: "低于安全库存 3 天用量" },
+      { name: "出口标签（欧版）", detail: "外贸备货", meta: "在途未覆盖本周 SO" },
+      { name: "模切胶膜 0.2T", detail: "线边", meta: "WO-9032 待料中" }
+    ]
+  }
+};
+
+const homeProductRankings = {
+  salesTop10: [
+    { rank: 1, name: "出口标签（欧版）", value: "28.6 万" },
+    { rank: 2, name: "注塑端盖", value: "21.2 万" },
+    { rank: 3, name: "B-210 包材套件", value: "18.9 万" },
+    { rank: 4, name: "模切辅料", value: "14.1 万" },
+    { rank: 5, name: "五金紧固件组合", value: "11.3 万" },
+    { rank: 6, name: "出口箱贴套装", value: "9.8 万" },
+    { rank: 7, name: "胶膜 0.18T", value: "8.4 万" },
+    { rank: 8, name: "端子压接件", value: "7.1 万" },
+    { rank: 9, name: "彩盒小号", value: "6.5 万" },
+    { rank: 10, name: "隔板珍珠棉", value: "5.9 万" }
+  ],
+  complaintTop10: [
+    { rank: 1, name: "注塑端盖", value: "7 起" },
+    { rank: 2, name: "模切辅料", value: "5 起" },
+    { rank: 3, name: "出口标签", value: "5 起" },
+    { rank: 4, name: "包材彩盒", value: "4 起" },
+    { rank: 5, name: "五金紧固件", value: "3 起" },
+    { rank: 6, name: "端子件", value: "3 起" },
+    { rank: 7, name: "胶带辅料", value: "2 起" },
+    { rank: 8, name: "塑料托盘", value: "2 起" },
+    { rank: 9, name: "珍珠棉衬垫", value: "2 起" },
+    { rank: 10, name: "特种膜材", value: "1 起" }
+  ]
+};
+
+const homeByModule = [
+  {
+    key: "product",
+    name: "商品",
+    todos: [
+      { title: "新品物料建档", text: "SKU-8821 规格与图纸待采购确认后生效。", badge: "资料", tone: "warn" },
+      { title: "价格失效复核", text: "3 个物料框架价将于明日到期，需提前续签或冻结下单。", badge: "价格", tone: "danger" }
+    ],
+    messages: [
+      { time: "09:12", title: "主数据变更", text: "B-210 包材类目属性已调整，请关注对询价模板的影响。" }
+    ]
+  },
+  {
+    key: "contract",
+    name: "合同",
+    todos: [
+      { title: "年度框架待签", text: "包材类 2026 年度框架协议法务已退回 1 处条款，待修订重提。", badge: "法务", tone: "warn" }
+    ],
+    messages: [
+      { time: "08:40", title: "合同到期预警", text: "星海包装框架合同剩余 18 天，建议本周完成续签评审。" }
+    ]
+  },
+  {
+    key: "supplier",
+    name: "供应商",
+    todos: [
+      { title: "准入资料补全", text: "东锐模切营业执照副本模糊，需重新上传后方能参与 RFQ。", badge: "准入", tone: "warn" },
+      { title: "绩效整改回函", text: "凯联塑胶 3 月整改报告未提交，影响新品份额评估。", badge: "绩效", tone: "danger" }
+    ],
+    messages: [
+      { time: "10:05", title: "供方状态变更", text: "恒拓五金已切换为「观察」状态，请控制新 PO 放量。" }
+    ]
+  },
+  {
+    key: "documents",
+    name: "单据管理",
+    todos: [
+      { title: "PO 回签超时", text: "PO-540182 超 24 小时未回签，需电话确认交期。", badge: "采购单", tone: "danger" },
+      { title: "交期变更确认", text: "PO-540169 供应商申请拆批，待仓库确认收货策略。", badge: "采购单", tone: "warn" },
+      { title: "外协工单齐套", text: "WO-9032 模切工序缺 1 项辅料，需协调供应商补料或改期。", badge: "加工单", tone: "danger" },
+      { title: "急单插单评审", text: "SO-7741 客户要求提前 2 天发运，需评估原料与产能。", badge: "订单", tone: "warn" }
+    ],
+    messages: [
+      { time: "11:20", title: "批量到货提醒", text: "今日 14:00-16:00 与采购单关联到货 11 批，请关注卸货窗口。", tag: "采购单" },
+      { time: "13:45", title: "加工进度", text: "WO-9018 已完工待质检，预计 16:00 可回传完工单。", tag: "加工单" },
+      { time: "14:02", title: "交期承诺", text: "SO-7728 锁船期不变，请优先保障标签与彩盒。", tag: "订单" }
+    ]
+  },
+  {
+    key: "statement",
+    name: "对账单",
+    todos: [
+      { title: "月结差异冻结", text: "星海包装 ST-2404-018 税率字段错误，待供应商重开票后解冻。", badge: "冻结", tone: "warn" },
+      { title: "三单匹配失败", text: "凯联塑胶收货数量差 320 件，需仓库与供方共同确认。", badge: "差异", tone: "danger" }
+    ],
+    messages: [
+      { time: "15:30", title: "对账截止", text: "本月对账窗口将于周五 18:00 关闭，请尽快处理冻结单。" }
+    ]
+  }
+];
+
+const modulePages = {
   "demand-pool": {
     kicker: "Demand Pool",
     title: "需求池",
@@ -600,22 +669,35 @@ const modulePages = {
 };
 
 const mainNavItems = Array.from(document.querySelectorAll(".main-nav-item"));
+const subnavShell = document.getElementById("subnav-shell");
 const subnav = document.getElementById("subnav");
 const subnavTitle = document.getElementById("subnav-title");
 const breadcrumb = document.getElementById("breadcrumb");
 const pageContent = document.getElementById("page-content");
 
-let activeMenu = "overview";
-let activePage = "cockpit";
+let activeMenu = "home";
+let activePage = null;
 
 function render() {
   const menu = menuConfig[activeMenu];
-  const currentPage = menu.pages.find((page) => page.id === activePage) ?? menu.pages[0];
-  activePage = currentPage.id;
 
   mainNavItems.forEach((item) => {
     item.classList.toggle("active", item.dataset.menu === activeMenu);
   });
+
+  if (activeMenu === "home") {
+    activePage = null;
+    subnavShell.hidden = true;
+    subnavTitle.textContent = "工作台";
+    subnav.innerHTML = "";
+    breadcrumb.textContent = "工作台";
+    pageContent.innerHTML = renderHomePage();
+    return;
+  }
+
+  subnavShell.hidden = false;
+  const currentPage = menu.pages.find((page) => page.id === activePage) ?? menu.pages[0];
+  activePage = currentPage.id;
 
   subnavTitle.textContent = menu.title;
   subnav.innerHTML = menu.pages
@@ -630,265 +712,209 @@ function render() {
     .join("");
 
   breadcrumb.textContent = `${menu.title} / ${currentPage.label}`;
-  pageContent.innerHTML = activePage === "cockpit" ? renderCockpitPage() : renderModulePage(modulePages[activePage]);
+  pageContent.innerHTML = renderModulePage(modulePages[activePage]);
 }
 
-function renderCockpitPage() {
-  const priorities = [
-    { title: "注塑端盖停线预警", text: "凯联塑胶承诺今晚 20:00 装车，若再次延误将影响二线明日投产。", badge: "红灯", tone: "danger" },
-    { title: "模切外协二轮回标", text: "RFQ-219 还有 2 家未回标，采购需在 11:00 前催回，避免评审延期。", badge: "询价", tone: "warn" },
-    { title: "月结对账差异", text: "星海包装 1.8 万差异待仓库确认数量，否则本周排款无法释放。", badge: "对账", tone: "warn" },
-    { title: "质检复判待结论", text: "IQC-046 需工程 15:00 前给出让步接收意见，采购同步通知供应商。", badge: "品质", tone: "success" }
-  ];
+function renderHomePage() {
+  return `
+    <section class="home-page">
+      <section class="home-section home-section--compact home-kpi">
+        <div class="panel-head">
+          <h3>核心数据</h3>
+          <span class="pill">今日</span>
+        </div>
+        <div class="stat-grid stat-grid--home">${renderMetricCards(homeStats)}</div>
+      </section>
 
-  const kpis = [
-    { label: "今日待审批", value: "12", trend: "4 单已超 2 小时", trendClass: "down" },
-    { label: "紧急交付", value: "6", trend: "3 单存在停线风险", trendClass: "down" },
-    { label: "在途采购额", value: "¥ 842万", trend: "本周新增 42 张 PO", trendClass: "up" },
-    { label: "月度降本达成", value: "72%", trend: "距目标还差 8pt", trendClass: "warn" }
-  ];
+      <div class="home-row home-row--two">
+        <section class="home-section home-section--compact home-col">
+          <div class="panel-head">
+            <h3>我的待办</h3>
+            <span class="pill warn">按模块</span>
+          </div>
+          <div class="home-module-grid home-module-grid--dense">
+            ${homeByModule.map((g) => renderHomeTodoBlock(g)).join("")}
+          </div>
+        </section>
+        <section class="home-section home-section--compact home-col">
+          <div class="panel-head">
+            <h3>通知提醒</h3>
+            <span class="pill">按模块</span>
+          </div>
+          <div class="home-module-grid home-module-grid--dense">
+            ${homeByModule.map((g) => renderHomeMessageBlock(g)).join("")}
+          </div>
+        </section>
+      </div>
 
-  const lanes = [
-    { title: "需求确认", count: "48 单", progress: 78 },
-    { title: "寻源报价", count: "19 个 RFQ", progress: 64 },
-    { title: "订单执行", count: "186 张 PO", progress: 82 },
-    { title: "到货质检", count: "34 批到货", progress: 53 },
-    { title: "对账付款", count: "27 张对账单", progress: 69 }
-  ];
+      <div class="home-row home-row--two">
+        <section class="home-section home-section--compact home-col home-analytics">
+          <div class="panel-head">
+            <h3>库存预警</h3>
+            <span class="pill warn">资金与缺料</span>
+          </div>
+          ${renderHomeInventoryAlert()}
+        </section>
+        <section class="home-section home-section--compact home-col home-analytics">
+          <div class="panel-head">
+            <h3>商品统计</h3>
+            <span class="pill">近 30 天</span>
+          </div>
+          ${renderHomeProductRankings()}
+        </section>
+      </div>
+    </section>
+  `;
+}
 
-  const risks = [
-    { title: "单一来源物料", value: "14", text: "注塑端盖、特种膜材、端子压接件缺第二来源。", badge: "结构风险", tone: "danger" },
-    { title: "未回签订单", value: "17", text: "5 张订单超过 24 小时未回签，需升级。", badge: "执行风险", tone: "warn" },
-    { title: "冻结对账单", value: "6", text: "以收货数量差和退货未冲销为主。", badge: "结算风险", tone: "warn" },
-    { title: "供应商整改", value: "13", text: "3 家履约评分跌破警戒线，需跟进改善计划。", badge: "供方风险", tone: "success" }
-  ];
+function renderHomeInventoryAlert() {
+  const { backlog, shortage } = homeInventoryAlert;
+  return `
+    <div class="home-split-grid">
+      <article class="home-inv-card home-inv-card--warn">
+        <div class="home-inv-head">
+          <span class="home-inv-title">${backlog.title}</span>
+          <strong class="home-inv-value">${backlog.value}</strong>
+        </div>
+        <p class="home-inv-hint">${backlog.hint}</p>
+        <ul class="home-mini-list">
+          ${backlog.rows
+            .map(
+              (r) => `
+            <li>
+              <span class="home-mini-name">${r.name}</span>
+              <span class="home-mini-detail">${r.detail}</span>
+              <span class="home-mini-meta">${r.meta}</span>
+            </li>`
+            )
+            .join("")}
+        </ul>
+      </article>
+      <article class="home-inv-card home-inv-card--danger">
+        <div class="home-inv-head">
+          <span class="home-inv-title">${shortage.title}</span>
+          <strong class="home-inv-value">${shortage.value}</strong>
+        </div>
+        <p class="home-inv-hint">${shortage.hint}</p>
+        <ul class="home-mini-list">
+          ${shortage.rows
+            .map(
+              (r) => `
+            <li>
+              <span class="home-mini-name">${r.name}</span>
+              <span class="home-mini-detail">${r.detail}</span>
+              <span class="home-mini-meta">${r.meta}</span>
+            </li>`
+            )
+            .join("")}
+        </ul>
+      </article>
+    </div>
+  `;
+}
 
-  const ranking = [
-    { title: "星海包装", score: "92", text: "准交稳定，适合作为出口标签和彩盒主供。" },
-    { title: "恒拓五金", score: "89", text: "质量和交付均衡，可提升备供份额。" },
-    { title: "凯联塑胶", score: "78", text: "交期波动较大，需要限制新品导入。" },
-    { title: "东锐模切", score: "71", text: "夜班交付偏弱，纳入重点整改。" }
-  ];
+function renderHomeProductRankings() {
+  const { salesTop10, complaintTop10 } = homeProductRankings;
+  return `
+    <div class="home-split-grid home-split-grid--rank">
+      <article class="home-rank-panel">
+        <div class="home-rank-head">
+          <h4>销量 TOP10</h4>
+          <span class="pill success">销售额</span>
+        </div>
+        <ol class="home-rank-list">
+          ${salesTop10
+            .map(
+              (row) => `
+            <li>
+              <span class="home-rank-idx">${row.rank}</span>
+              <span class="home-rank-name">${row.name}</span>
+              <span class="home-rank-val">${row.value}</span>
+            </li>`
+            )
+            .join("")}
+        </ol>
+      </article>
+      <article class="home-rank-panel">
+        <div class="home-rank-head">
+          <h4>客诉 TOP10</h4>
+          <span class="pill danger">件数</span>
+        </div>
+        <ol class="home-rank-list">
+          ${complaintTop10
+            .map(
+              (row) => `
+            <li>
+              <span class="home-rank-idx">${row.rank}</span>
+              <span class="home-rank-name">${row.name}</span>
+              <span class="home-rank-val">${row.value}</span>
+            </li>`
+            )
+            .join("")}
+        </ol>
+      </article>
+    </div>
+  `;
+}
 
-  const timeline = [
-    { title: "09:00 晨会", text: "同步停线风险、紧急 PR 和当日高峰到货。"},
-    { title: "11:00 询价截点", text: "RFQ-219 二轮报价需补齐，下午进入评审。"},
-    { title: "14:30 仓库高峰", text: "11 批次集中到仓，需确认未预约 ASN 是否顺利分流。"},
-    { title: "17:00 异常收口", text: "冻结对账、质检复判、催交承诺统一收口形成次日清单。"}
-  ];
+function renderHomeTodoBlock(group) {
+  const count = group.todos.length;
+  const items =
+    group.todos.length === 0
+      ? `<p class="home-empty">暂无待办</p>`
+      : `<ul class="home-module-list">
+          ${group.todos
+            .map(
+              (t) => `
+            <li class="home-todo-item">
+              <div class="home-item-head">
+                <strong>${t.title}</strong>
+                ${renderPill(t.badge, t.tone)}
+              </div>
+              <p>${t.text}</p>
+            </li>`
+            )
+            .join("")}
+        </ul>`;
 
   return `
-    <section class="cockpit-grid">
-      <article class="hero-panel">
-        <div class="hero-top">
-          <div class="hero-copy">
-            <p class="eyebrow">Procurement Daily Cockpit</p>
-            <h3>把采购一天最关键的风险、动作和协同节点，集中在同一个指挥面板里。</h3>
-            <p>这个工作台先看缺料风险和审批堵点，再看询价、订单、到货和对账的执行状态，让采购员不用在 ERP 里反复切模块也能判断今天先做什么。</p>
-          </div>
-          <span class="pill">08:30 晨会后更新</span>
-        </div>
+    <article class="home-module-card">
+      <div class="home-module-head">
+        <span class="home-module-name">${group.name}</span>
+        <span class="home-module-count" aria-label="待办数量">${count}</span>
+      </div>
+      ${items}
+    </article>
+  `;
+}
 
-        <div class="hero-layout">
-          <div>
-            <div class="hero-actions">
-              <button class="action-chip" type="button">3 单停线风险</button>
-              <button class="action-chip" type="button">9 家待回标</button>
-              <button class="action-chip" type="button">4 批待质检结论</button>
-              <button class="action-chip" type="button">6 张冻结对账单</button>
-            </div>
-          </div>
-
-          <aside class="hero-spotlight">
-            <div class="ring-wrap">
-              <div class="signal-ring" style="--value:72;">72%</div>
-              <div>
-                <p class="small-label">月度降本达成</p>
-                <strong>目标 ¥ 120 万</strong>
-                <p>当前已落地 ¥ 86.4 万，剩余重点来自包材框架重谈和辅料目录化。</p>
+function renderHomeMessageBlock(group) {
+  const items =
+    group.messages.length === 0
+      ? `<p class="home-empty">暂无消息</p>`
+      : `<ul class="home-msg-list">
+          ${group.messages
+            .map(
+              (m) => `
+            <li class="home-msg-item">
+              <div class="home-msg-meta">
+                <span class="home-msg-time">${m.time}</span>
+                ${m.tag ? `<span class="home-msg-tag">${m.tag}</span>` : ""}
               </div>
-            </div>
-            <ul class="spotlight-list">
-              <li>本周最值得追的动作是包材年度框架回谈和注塑件第二来源开发。</li>
-              <li>当前最大的执行风险是 PO 回签老化和未预约 ASN 造成的仓库高峰拥堵。</li>
-            </ul>
-          </aside>
-        </div>
-      </article>
-
-      <aside class="priority-panel">
-        <div class="panel-head">
-          <h3>待我处理</h3>
-          <span class="pill danger">12 项</span>
-        </div>
-        <div class="priority-list">
-          ${priorities
-            .map(
-              (item) => `
-                <article class="priority-item">
-                  ${renderPill(item.badge, item.tone)}
-                  <strong>${item.title}</strong>
-                  <p>${item.text}</p>
-                </article>
-              `
+              <strong>${m.title}</strong>
+              <p>${m.text}</p>
+            </li>`
             )
             .join("")}
-        </div>
-      </aside>
-    </section>
+        </ul>`;
 
-    <section class="stat-grid">
-      ${renderMetricCards(kpis)}
-    </section>
-
-    <section class="dashboard-grid">
-      <article class="panel-card span-5">
-        <div class="panel-head">
-          <h3>采购流程进度</h3>
-          <span class="pill">今日视角</span>
-        </div>
-        <div class="lane-list">
-          ${lanes
-            .map(
-              (lane) => `
-                <div class="lane-card">
-                  <div class="lane-row">
-                    <strong>${lane.title}</strong>
-                    <span class="small-label">${lane.count}</span>
-                  </div>
-                  <div class="lane-bar"><span style="width: ${lane.progress}%;"></span></div>
-                </div>
-              `
-            )
-            .join("")}
-        </div>
-      </article>
-
-      <article class="panel-card span-3">
-        <div class="panel-head">
-          <h3>风险雷达</h3>
-          <span class="pill warn">需盯住</span>
-        </div>
-        <ul class="signal-list">
-          ${risks
-            .map(
-              (item) => `
-                <li>
-                  <div class="signal-top">
-                    <strong>${item.title}</strong>
-                    <span class="small-label">${item.value}</span>
-                  </div>
-                  <p>${item.text}</p>
-                  ${renderPill(item.badge, item.tone)}
-                </li>
-              `
-            )
-            .join("")}
-        </ul>
-      </article>
-
-      <article class="panel-card span-4">
-        <div class="panel-head">
-          <h3>供应商准交表现</h3>
-          <span class="pill success">月度评分</span>
-        </div>
-        <ul class="rank-list">
-          ${ranking
-            .map(
-              (item) => `
-                <li class="rank-item">
-                  <div class="rank-top">
-                    <strong>${item.title}</strong>
-                    <span>${item.score}</span>
-                  </div>
-                  <p>${item.text}</p>
-                </li>
-              `
-            )
-            .join("")}
-        </ul>
-      </article>
-
-      <article class="panel-card span-4">
-        <div class="panel-head">
-          <h3>价格波动</h3>
-          <span class="pill">近 6 周</span>
-        </div>
-        <div class="trend-grid">
-          <div class="trend-card">
-            <strong>塑胶件</strong>
-            <p>受原材上涨影响，近 3 周单价持续抬升，建议先拿说明再签涨价。</p>
-            <div class="sparkline">
-              <span style="height: 42%;"></span>
-              <span style="height: 49%;"></span>
-              <span style="height: 54%;"></span>
-              <span style="height: 62%;"></span>
-              <span style="height: 74%;"></span>
-              <span style="height: 82%;"></span>
-            </div>
-          </div>
-          <div class="trend-card">
-            <strong>纸材标签</strong>
-            <p>价格回落明显，适合启动二季度框架回谈，把回落收益转成降本成果。</p>
-            <div class="sparkline">
-              <span style="height: 78%;"></span>
-              <span style="height: 72%;"></span>
-              <span style="height: 63%;"></span>
-              <span style="height: 56%;"></span>
-              <span style="height: 50%;"></span>
-              <span style="height: 44%;"></span>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="panel-card span-4">
-        <div class="panel-head">
-          <h3>采购支出结构</h3>
-          <span class="pill">本月 spend</span>
-        </div>
-        <div class="spend-grid">
-          <div class="spend-card">
-            <strong>品类占比</strong>
-            <p>包材 33%、注塑件 25%、五金 15%、MRO 7%、其他 20%。</p>
-            <div class="stack-bar">
-              <span style="background:#0b7a78; flex: 33;"></span>
-              <span style="background:#1c918e; flex: 25;"></span>
-              <span style="background:#d8891c; flex: 15;"></span>
-              <span style="background:#b9a47e; flex: 7;"></span>
-              <span style="background:#31424a; flex: 20;"></span>
-            </div>
-          </div>
-          <div class="spend-card">
-            <strong>集中度提醒</strong>
-            <p>Top10 供应商占比 63%，注塑类和电子辅件的供方集中度偏高。</p>
-            <div class="stack-bar">
-              <span style="background:#203038; flex: 63;"></span>
-              <span style="background:#d9d0c1; flex: 37;"></span>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="panel-card span-4">
-        <div class="panel-head">
-          <h3>到货与质检时间线</h3>
-          <span class="pill warn">今日重点</span>
-        </div>
-        <ul class="timeline-list">
-          ${timeline
-            .map(
-              (item) => `
-                <li class="timeline-item">
-                  <strong>${item.title}</strong>
-                  <p>${item.text}</p>
-                </li>
-              `
-            )
-            .join("")}
-        </ul>
-      </article>
-    </section>
+  return `
+    <article class="home-module-card home-module-card--msg">
+      <div class="home-module-head">
+        <span class="home-module-name">${group.name}</span>
+      </div>
+      ${items}
+    </article>
   `;
 }
 
@@ -990,7 +1016,7 @@ function renderMetricCards(stats) {
   return stats
     .map(
       (item) => `
-        <article class="kpi-card">
+        <article class="kpi-card ${getMetricClass(item.label)}">
           <p class="metric-label">${item.label}</p>
           <strong>${item.value}</strong>
           <p class="kpi-trend ${item.trendClass || ""}">${item.trend}</p>
@@ -998,6 +1024,22 @@ function renderMetricCards(stats) {
       `
     )
     .join("");
+}
+
+function getMetricClass(label) {
+  if (label === "今日采购额") {
+    return "metric-emphasis metric-purchase";
+  }
+  if (label === "今日销售额") {
+    return "metric-emphasis metric-sales";
+  }
+  if (label === "异常单量") {
+    return "metric-emphasis metric-abnormal";
+  }
+  if (label === "我的待办") {
+    return "metric-emphasis metric-todo";
+  }
+  return "";
 }
 
 function renderPill(text, tone = "") {
@@ -1036,7 +1078,12 @@ function renderTable(table) {
 mainNavItems.forEach((item) => {
   item.addEventListener("click", () => {
     activeMenu = item.dataset.menu;
-    activePage = menuConfig[activeMenu].pages[0].id;
+    if (activeMenu === "home") {
+      activePage = null;
+    } else {
+      const menu = menuConfig[activeMenu];
+      activePage = menu.pages.length ? menu.pages[0].id : null;
+    }
     render();
   });
 });
