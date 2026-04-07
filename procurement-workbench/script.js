@@ -615,7 +615,9 @@ const homeStats = [
   { label: "今日采购额", value: "¥ 186.4万", trend: "较昨日 +8.3%", trendClass: "up" },
   { label: "今日销售额", value: "¥ 241.7万", trend: "产销比 77.1%", trendClass: "up" },
   { label: "异常单量", value: "17", trend: "交期异常 9 单", trendClass: "down" },
-  { label: "我的待办", value: "11", trend: "今日新增 6 项", trendClass: "warn" }
+  { label: "我的待办", value: "11", trend: "今日新增 6 项", trendClass: "warn" },
+  { label: "欠款统计", value: "¥ 23.6万", trend: "31+ 天占比 21%", trendClass: "warn" },
+  { label: "今日客诉单量", value: "14", trend: "较昨日 -2 单", trendClass: "up" }
 ];
 
 const homeInventoryAlert = {
@@ -2281,15 +2283,8 @@ function renderHomePage() {
     .filter(Boolean)
     .join("");
 
-  const hasKpiCol = showCore || showTodos;
-  const hasNoticeCol = showNotices;
-  const topRowClass = hasKpiCol && hasNoticeCol ? "home-row home-row--two" : "home-row";
-
-  const kpiTodoColumn = `
-        <div class="home-col home-col--stack">
-          ${
-            showCore
-              ? `<section class="home-section home-section--compact home-kpi">
+  const coreCard = showCore
+    ? `<section class="home-section home-section--compact home-kpi">
           <div class="panel-head">
             <div class="home-head-left">
               <h3>工作台总览</h3>
@@ -2299,11 +2294,10 @@ function renderHomePage() {
           </div>
           <div class="stat-grid stat-grid--home">${renderMetricCards(homeStats)}</div>
         </section>`
-              : ""
-          }
-          ${
-            showTodos
-              ? `<section class="home-section home-section--compact home-todos">
+    : "";
+
+  const todoCard = showTodos
+    ? `<section class="home-section home-section--compact home-todos">
           <div class="panel-head">
             <h3>我的待办</h3>
             <span class="pill warn">按模块</span>
@@ -2312,14 +2306,12 @@ function renderHomePage() {
             ${homeByModule.map((g) => renderHomeTodoBlock(g)).join("")}
           </div>
         </section>`
-              : ""
-          }
-        </div>`;
+    : "";
 
-  const noticeColumn = showNotices
+  const noticeCard = showNotices
     ? `<section class="home-section home-section--compact home-col home-notice-col">
           <div class="panel-head">
-            <h3>通知</h3>
+            <h3>系统通知</h3>
             <span class="pill">按模块</span>
           </div>
           <div class="home-module-grid home-module-grid--dense">
@@ -2328,24 +2320,30 @@ function renderHomePage() {
         </section>`
     : "";
 
+  const coreTodoRow = coreCard || todoCard
+    ? `<div class="home-row home-row--two home-row--core-todo">
+        ${coreCard}
+        ${todoCard}
+      </div>`
+    : "";
+
+  const chartNoticeRow = charts || noticeCard
+    ? `<div class="home-row home-row--two home-row--chart-notice">
+        ${
+          charts
+            ? `<section class="home-section home-section--compact home-charts-wrap" aria-label="统计图示">
+        <div class="home-charts-col">${charts}</div>
+      </section>`
+            : ""
+        }
+        ${noticeCard}
+      </div>`
+    : "";
+
   return `
     <section class="home-page">
-      ${
-        hasKpiCol || hasNoticeCol
-          ? `<div class="${topRowClass}">
-        ${hasKpiCol ? kpiTodoColumn : ""}
-        ${hasNoticeCol ? noticeColumn : ""}
-      </div>`
-          : ""
-      }
-
-      ${
-        charts
-          ? `<section class="home-section home-section--compact home-charts-wrap" aria-label="统计图示">
-        <div class="home-charts-row">${charts}</div>
-      </section>`
-          : ""
-      }
+      ${coreTodoRow}
+      ${chartNoticeRow}
 
       ${
         showInventoryBacklog || showInventoryShortage || showProductStats
