@@ -1733,6 +1733,7 @@ const HOME_WIDGETS = [
   { id: "inventoryBacklog", label: "库存积压", defaultOn: true },
   { id: "inventoryShortage", label: "库存缺失", defaultOn: true },
   { id: "productStats", label: "商品统计", defaultOn: true },
+  { id: "marketInfo", label: "市场信息", defaultOn: true },
   { id: "supplierPerf", label: "供应商绩效", defaultOn: false },
   { id: "arrears", label: "欠款统计", defaultOn: false },
   { id: "chartLine", label: "近期采购额统计", defaultOn: true },
@@ -2005,6 +2006,181 @@ function renderHomeInventoryAlertCombined() {
   `;
 }
 
+const MARKET_TAGS_KEY = "homeMarketTagsV1";
+const MARKET_ACTIVE_TAG_KEY = "homeMarketActiveTagV1";
+
+const defaultMarketTags = ["零售", "供应链", "物流", "商品分类选取", "企业福利市场"];
+
+const marketNews = [
+  { tag: "零售", title: "社区门店鲜食增长：即配品类占比提升", summary: "建议关注日配与熟食供应稳定性，提前锁定高峰时段产能。", time: "09:20" },
+  { tag: "供应链", title: "产地直采趋势：叶菜价格波动加大", summary: "建议增加 1-2 个备选基地，并设置到货时段容错。", time: "10:05" },
+  { tag: "物流", title: "冷链运力紧张：跨城干线延误风险上升", summary: "建议对关键 SKU 提前发运，设置缺货阈值预警。", time: "11:10" },
+  { tag: "商品分类选取", title: "春季爆品：草莓/脐橙/西红柿动销上升", summary: "建议复核门店补货频率与陈列策略，避免积压与缺货同时发生。", time: "14:30" },
+  { tag: "企业福利市场", title: "团购福利季启动：礼盒需求集中", summary: "建议提前锁定礼盒包材与果品等级，明确交付 SLA。", time: "16:05" }
+];
+
+function getMarketTags() {
+  try {
+    const raw = localStorage.getItem(MARKET_TAGS_KEY);
+    const parsed = raw ? JSON.parse(raw) : null;
+    const tags = Array.isArray(parsed) ? parsed.filter((t) => typeof t === "string" && t.trim()) : defaultMarketTags;
+    return tags.length ? tags : defaultMarketTags;
+  } catch {
+    return defaultMarketTags;
+  }
+}
+
+function saveMarketTags(tags) {
+  try {
+    localStorage.setItem(MARKET_TAGS_KEY, JSON.stringify(tags));
+  } catch {
+    /* ignore */
+  }
+}
+
+function getActiveMarketTag(tags) {
+  try {
+    const t = localStorage.getItem(MARKET_ACTIVE_TAG_KEY);
+    if (t && tags.includes(t)) return t;
+  } catch {
+    /* ignore */
+  }
+  return tags[0] ?? "";
+}
+
+function setActiveMarketTag(tag) {
+  try {
+    localStorage.setItem(MARKET_ACTIVE_TAG_KEY, tag);
+  } catch {
+    /* ignore */
+  }
+}
+
+function renderMarketTagsModal(tags) {
+  const value = tags.join("、");
+  return `
+    <div class="home-modal-backdrop" id="market-tags-modal" hidden>
+      <div class="home-modal" role="dialog" aria-modal="true" aria-labelledby="market-tags-title">
+        <div class="home-modal-head">
+          <div>
+            <h3 id="market-tags-title">市场信息标签</h3>
+            <p class="home-modal-sub">用“、/，/,/空格/换行”分隔，最多 12 个。</p>
+          </div>
+          <button type="button" class="home-modal-close" id="market-tags-close" aria-label="关闭">×</button>
+        </div>
+        <div class="home-modal-body">
+          <textarea class="home-textarea" id="market-tags-input" rows="4" spellcheck="false">${value}</textarea>
+          <div class="home-mini-hint">示例：零售、供应链、物流、企业福利市场</div>
+        </div>
+        <div class="home-modal-actions">
+          <button type="button" class="home-btn home-btn-ghost" id="market-tags-reset">恢复默认</button>
+          <div class="home-modal-actions-right">
+            <button type="button" class="home-btn home-btn-ghost" id="market-tags-cancel">取消</button>
+            <button type="button" class="home-btn home-btn-primary" id="market-tags-save">保存</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function ensureMarketTagsModal() {
+  let host = document.getElementById("market-tags-modal");
+  if (!host) {
+    const wrap = document.createElement("div");
+    wrap.innerHTML = renderMarketTagsModal(getMarketTags());
+    document.body.appendChild(wrap);
+    host = document.getElementById("market-tags-modal");
+  }
+  if (host && host.dataset.bound !== "1") {
+    host.dataset.bound = "1";
+    host.addEventListener("click", (event) => {
+      if (event.target === host) {
+        host.hidden = true;
+        return;
+      }
+      const close = event.target.closest("#market-tags-close, #market-tags-cancel");
+      if (close) {
+        event.preventDefault();
+        host.hidden = true;
+        return;
+      }
+      const reset = event.target.closest("#market-tags-reset");
+      if (reset) {
+        event.preventDefault();
+        saveMarketTags(defaultMarketTags);
+        setActiveMarketTag(defaultMarketTags[0]);
+        host.hidden = true;
+        render();
+        return;
+      }
+      const save = event.target.closest("#market-tags-save");
+      if (save) {
+        event.preventDefault();
+        const input = host.querySelector("#market-tags-input");
+        const raw = String(input?.value || "");
+        const tags = raw
+          .split(/[、，,\n\r\t ]+/g)
+          .map((t) => t.trim())
+          .filter(Boolean)
+          .slice(0, 12);
+        const finalTags = tags.length ? tags : defaultMarketTags;
+        saveMarketTags(finalTags);
+        const active = getActiveMarketTag(finalTags);
+        setActiveMarketTag(active);
+        host.hidden = true;
+        render();
+        return;
+      }
+    });
+  }
+  return host;
+}
+
+function renderHomeMarketInfo() {
+  const tags = getMarketTags();
+  const active = getActiveMarketTag(tags);
+  const items = marketNews.filter((n) => n.tag === active).slice(0, 6);
+
+  return `
+    <section class="home-section home-section--compact home-col">
+      <div class="panel-head">
+        <div class="home-head-left">
+          <h3>市场信息</h3>
+          <span class="pill">采购视角</span>
+        </div>
+        <button type="button" class="home-btn home-btn-ghost" id="market-tags-open">标签设置</button>
+      </div>
+
+      <div class="market-tags" role="tablist" aria-label="市场信息标签">
+        ${tags
+          .map(
+            (t) => `
+          <button type="button" class="market-tag ${t === active ? "is-active" : ""}" data-market-tag="${t}">
+            ${t}
+          </button>`
+          )
+          .join("")}
+      </div>
+
+      <ul class="market-list">
+        ${items
+          .map(
+            (n) => `
+          <li class="market-item">
+            <div class="market-item-head">
+              <strong class="market-item-title">${n.title}</strong>
+              <span class="market-item-time">${n.time}</span>
+            </div>
+            <p class="market-item-summary">${n.summary}</p>
+          </li>`
+          )
+          .join("")}
+      </ul>
+    </section>
+  `;
+}
+
 
 function renderHomePage() {
   const enabled = getHomeWidgetState();
@@ -2014,6 +2190,7 @@ function renderHomePage() {
   const showInventoryBacklog = enabled.has("inventoryBacklog");
   const showInventoryShortage = enabled.has("inventoryShortage");
   const showProductStats = enabled.has("productStats");
+  const showMarketInfo = enabled.has("marketInfo");
   const showSupplierPerf = enabled.has("supplierPerf");
   const showArrears = enabled.has("arrears");
   const showLine = enabled.has("chartLine");
@@ -2049,37 +2226,29 @@ function renderHomePage() {
     .filter(Boolean)
     .join("");
 
-  return `
-    <section class="home-page">
-      <section class="home-section home-section--compact home-kpi">
-        <div class="panel-head">
-          <div class="home-head-left">
-            <h3>工作台总览</h3>
-            <span class="pill">今日</span>
+  const hasKpiCol = showCore || showTodos;
+  const hasNoticeCol = showNotices;
+  const topRowClass = hasKpiCol && hasNoticeCol ? "home-row home-row--two" : "home-row";
+
+  const kpiTodoColumn = `
+        <div class="home-col home-col--stack">
+          ${
+            showCore
+              ? `<section class="home-section home-section--compact home-kpi">
+          <div class="panel-head">
+            <div class="home-head-left">
+              <h3>工作台总览</h3>
+              <span class="pill">今日</span>
+            </div>
+            <button type="button" class="home-btn home-btn-ghost" id="home-customize-open">自定义</button>
           </div>
-          <button type="button" class="home-btn home-btn-ghost" id="home-customize-open">自定义</button>
-        </div>
-        ${
-          showCore
-            ? `<div class="stat-grid stat-grid--home">${renderMetricCards(homeStats)}</div>`
-            : `<p class="home-empty">已隐藏核心数据</p>`
-        }
-      </section>
-
-      ${
-        charts
-          ? `<section class="home-section home-section--compact home-charts-wrap" aria-label="统计图示">
-        <div class="home-charts-row">${charts}</div>
-      </section>`
-          : ""
-      }
-
-      ${
-        showTodos || showNotices
-          ? `<div class="home-row home-row--two">
-        ${
-          showTodos
-            ? `<section class="home-section home-section--compact home-col">
+          <div class="stat-grid stat-grid--home">${renderMetricCards(homeStats)}</div>
+        </section>`
+              : ""
+          }
+          ${
+            showTodos
+              ? `<section class="home-section home-section--compact home-todos">
           <div class="panel-head">
             <h3>我的待办</h3>
             <span class="pill warn">按模块</span>
@@ -2088,11 +2257,12 @@ function renderHomePage() {
             ${homeByModule.map((g) => renderHomeTodoBlock(g)).join("")}
           </div>
         </section>`
-            : ""
-        }
-        ${
-          showNotices
-            ? `<section class="home-section home-section--compact home-col">
+              : ""
+          }
+        </div>`;
+
+  const noticeColumn = showNotices
+    ? `<section class="home-section home-section--compact home-col home-notice-col">
           <div class="panel-head">
             <h3>通知</h3>
             <span class="pill">按模块</span>
@@ -2101,9 +2271,24 @@ function renderHomePage() {
             ${homeByModule.map((g) => renderHomeMessageBlock(g)).join("")}
           </div>
         </section>`
-            : ""
-        }
+    : "";
+
+  return `
+    <section class="home-page">
+      ${
+        hasKpiCol || hasNoticeCol
+          ? `<div class="${topRowClass}">
+        ${hasKpiCol ? kpiTodoColumn : ""}
+        ${hasNoticeCol ? noticeColumn : ""}
       </div>`
+          : ""
+      }
+
+      ${
+        charts
+          ? `<section class="home-section home-section--compact home-charts-wrap" aria-label="统计图示">
+        <div class="home-charts-row">${charts}</div>
+      </section>`
           : ""
       }
 
@@ -2142,6 +2327,8 @@ function renderHomePage() {
       </div>`
           : ""
       }
+
+      ${showMarketInfo ? renderHomeMarketInfo() : ""}
     </section>
   `;
 }
@@ -2530,6 +2717,7 @@ document.addEventListener("keydown", (event) => {
 
 buildMainNav();
 ensureHomeCustomizeModal();
+ensureMarketTagsModal();
 render();
 
 function getNowTimeHHMM() {
@@ -2650,6 +2838,32 @@ document.addEventListener("click", (event) => {
   if (closeBtn) {
     event.preventDefault();
     closeAiDrawer();
+    return;
+  }
+});
+
+document.addEventListener("click", (event) => {
+  const tagBtn = event.target.closest(".market-tag");
+  if (tagBtn) {
+    event.preventDefault();
+    const tag = tagBtn.dataset.marketTag;
+    if (tag) {
+      setActiveMarketTag(tag);
+      render();
+    }
+    return;
+  }
+  const open = event.target.closest("#market-tags-open");
+  if (open) {
+    event.preventDefault();
+    const modal = ensureMarketTagsModal();
+    if (modal) {
+      // refresh textarea with current tags
+      const tags = getMarketTags();
+      const input = modal.querySelector("#market-tags-input");
+      if (input) input.value = tags.join("、");
+      modal.hidden = false;
+    }
     return;
   }
 });
