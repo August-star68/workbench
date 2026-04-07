@@ -2391,17 +2391,21 @@ function renderHomePage() {
       </div>`
     : "";
 
-  const chartNoticeRow = charts || noticeCard
-    ? `<div class="home-row home-row--two home-row--chart-notice">
-        ${
-          charts
-            ? `<section class="home-section home-section--compact home-charts-wrap" aria-label="统计图示">
+  const chartSection = charts
+    ? `<section class="home-section home-section--compact home-charts-wrap" aria-label="统计图示">
         <div class="${chartsClass}">${charts}</div>
       </section>`
-            : ""
-        }
-        ${noticeCard}
-      </div>`
+    : "";
+
+  const chartNoticeRow = charts || noticeCard
+    ? noticeCard
+      ? `<div class="home-row home-row--two home-row--chart-notice">
+          ${chartSection}
+          ${noticeCard}
+        </div>`
+      : `<div class="home-row home-row--chart-only">
+          ${chartSection}
+        </div>`
     : "";
 
   const viewSwitchSection = `
