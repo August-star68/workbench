@@ -7,10 +7,6 @@ const menuConfig = {
       { id: "home-notify", label: "消息中心", desc: "通知公告与订阅" }
     ]
   },
-  market: {
-    title: "市场动态",
-    pages: [{ id: "market-dynamics", label: "市场动态", desc: "按标签查看并自定义市场资讯" }]
-  },
   foundation: {
     title: "基础信息",
     pages: [
@@ -93,6 +89,10 @@ const menuConfig = {
       { id: "price-index", label: "价格指数", desc: "行情、波动与降本" },
       { id: "custom-report", label: "自定义报表", desc: "拖拽、订阅与推送" }
     ]
+  },
+  market: {
+    title: "市场动态",
+    pages: [{ id: "market-dynamics", label: "市场动态", desc: "按标签查看并自定义市场资讯" }]
   }
 };
 
@@ -614,10 +614,12 @@ function renderModuleLandingPage(menuKey) {
 const homeStats = [
   { label: "今日采购额", value: "¥ 186.4万", trend: "较昨日 +8.3%", trendClass: "up" },
   { label: "今日销售额", value: "¥ 241.7万", trend: "产销比 77.1%", trendClass: "up" },
+  { label: "今日毛利额", value: "¥ 55.3万", trend: "毛利率 22.9%", trendClass: "up" },
   { label: "异常单量", value: "17", trend: "交期异常 9 单", trendClass: "down" },
   { label: "我的待办", value: "11", trend: "今日新增 6 项", trendClass: "warn" },
   { label: "欠款统计", value: "¥ 23.6万", trend: "31+ 天占比 21%", trendClass: "warn" },
-  { label: "今日客诉单量", value: "14", trend: "较昨日 -2 单", trendClass: "up" }
+  { label: "今日客诉单量", value: "14", trend: "较昨日 -2 单", trendClass: "up" },
+  { label: "竞价中标数", value: "29", trend: "较昨日 +4 单", trendClass: "up" }
 ];
 
 const homeQuickActions = [
@@ -715,9 +717,7 @@ const homeByModule = [
     name: "单据管理",
     todos: [
       { title: "PO 回签超时", text: "PO-540182 超 24 小时未回签，需电话确认交期。", badge: "采购单", tone: "danger" },
-      { title: "交期变更确认", text: "PO-540169 供应商申请拆批，待仓库确认收货策略。", badge: "采购单", tone: "warn" },
-      { title: "外协工单齐套", text: "WO-9032 净菜分包工序缺 1 项辅料，需协调供应商补料或改期。", badge: "加工单", tone: "danger" },
-      { title: "急单插单评审", text: "SO-7741 客户要求提前 2 天发运，需评估原料与产能。", badge: "订单", tone: "warn" }
+      { title: "交期变更确认", text: "PO-540169 供应商申请拆批，待仓库确认收货策略。", badge: "采购单", tone: "warn" }
     ],
     messages: [
       { time: "11:20", title: "批量到货提醒", text: "今日 14:00-16:00 与采购单关联到货 11 批，请关注卸货窗口。", tag: "采购单" },
@@ -1752,8 +1752,7 @@ const HOME_WIDGETS = [
   { id: "supplierPerf", label: "供应商绩效", defaultOn: false },
   { id: "arrears", label: "欠款统计", defaultOn: false },
   { id: "chartLine", label: "近期采购额统计", defaultOn: true },
-  { id: "chartPie", label: "库存分类占比", defaultOn: true },
-  { id: "chartBar", label: "近期竞价中标", defaultOn: true }
+  { id: "chartPie", label: "库存分类占比", defaultOn: true }
 ];
 
 const HOME_WIDGETS_STORAGE_KEY = "homeWorkbenchWidgetsV2";
@@ -2259,7 +2258,6 @@ function renderHomePage() {
   const showArrears = enabled.has("arrears");
   const showLine = enabled.has("chartLine");
   const showPie = enabled.has("chartPie");
-  const showBar = enabled.has("chartBar");
 
   const charts = [
     showLine
@@ -2275,14 +2273,6 @@ function renderHomePage() {
             <h4 class="home-chart-title">库存分类占比</h4>
             <div class="home-chart-canvas-wrap">
               <canvas id="home-chart-pie" role="img" aria-label="当前库存分类占比饼图"></canvas>
-            </div>
-          </article>`
-      : "",
-    showBar
-      ? `<article class="home-chart-card">
-            <h4 class="home-chart-title">近1个月竞价中标</h4>
-            <div class="home-chart-canvas-wrap">
-              <canvas id="home-chart-bar" role="img" aria-label="近1个月竞价中标柱形图"></canvas>
             </div>
           </article>`
       : ""
