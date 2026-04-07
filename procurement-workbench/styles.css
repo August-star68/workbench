@@ -1725,6 +1725,20 @@ button {
   padding-top: 8px;
 }
 
+.home-row--core-todo .home-kpi,
+.home-row--core-todo .home-todos,
+.home-row--chart-notice .home-charts-wrap,
+.home-row--chart-notice .home-notice-col {
+  min-height: 100%;
+}
+
+.home-charts-col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  align-items: stretch;
+}
+
 .home-charts-row {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
