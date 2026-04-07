@@ -34,17 +34,29 @@
         </div>
       </header>
 
-      <nav class="main-nav" aria-label="一级导航">
-        <button class="main-nav-item active" data-menu="home">工作台</button>
-        <button class="main-nav-item" data-menu="sourcing">寻源定价</button>
-        <button class="main-nav-item" data-menu="supplier">供应商协同</button>
-        <button class="main-nav-item" data-menu="execution">采购执行</button>
-        <button class="main-nav-item" data-menu="inbound">到货质检</button>
-        <button class="main-nav-item" data-menu="settlement">对账结算</button>
-        <button class="main-nav-item" data-menu="analysis">经营分析</button>
+      <nav id="main-nav" class="main-nav" aria-label="一级导航">
+        <div class="main-nav-cluster" id="main-nav-cluster"></div>
+        <div class="main-nav-feature-slot">
+          <button class="main-nav-item main-nav-feature" type="button" data-menu="function-map">
+            <span class="main-nav-feature-icon" aria-hidden="true">⬡</span>
+            功能总览
+          </button>
+          <button
+            type="button"
+            class="main-nav-feature-toggle"
+            id="fishbone-toggle"
+            aria-expanded="true"
+            aria-controls="function-map-root"
+            title="收起或展开当前视图"
+          >
+            <svg class="main-nav-feature-toggle-icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+              <path fill="currentColor" d="M8 11L3 6h10L8 11z" />
+            </svg>
+          </button>
+        </div>
       </nav>
 
-      <section id="subnav-shell" class="subnav-shell" aria-label="二级导航">
+      <section id="subnav-shell" class="subnav-shell subnav-shell--hidden" aria-hidden="true" hidden>
         <div class="subnav-head">
           <p class="eyebrow">Daily Workflow</p>
           <h2 id="subnav-title">工作台</h2>
@@ -52,16 +64,41 @@
         <div id="subnav" class="subnav"></div>
       </section>
 
-      <main class="content-shell">
+      <main class="content-shell" id="content-shell">
         <div class="content-topbar">
           <div id="breadcrumb" class="breadcrumb">工作台</div>
-          <div class="status-line">ERP 工作台 · PC 版采购视角</div>
+          <div class="content-topbar-right">
+            <div class="status-line">供应链 ERP · 采购与协同视角</div>
+            <button type="button" class="home-btn home-btn-ghost" id="workbench-customize-open">自定义工作台</button>
+          </div>
         </div>
+
+        <nav id="module-subtabs" class="module-subtabs" aria-label="当前模块二级页面"></nav>
 
         <div id="page-content"></div>
       </main>
     </div>
 
+    <button type="button" class="ai-fab" id="ai-assistant-open" aria-haspopup="dialog" aria-controls="ai-assistant-drawer">
+      AI助理
+    </button>
+
+    <aside class="ai-drawer" id="ai-assistant-drawer" hidden aria-label="AI助理对话框">
+      <div class="ai-drawer-head">
+        <div class="ai-drawer-title">
+          <strong>AI助理</strong>
+          <span class="ai-drawer-sub">工作台演示对话</span>
+        </div>
+        <button type="button" class="ai-drawer-close" id="ai-assistant-close" aria-label="关闭">×</button>
+      </div>
+      <div class="ai-chat" id="ai-chat" role="log" aria-live="polite"></div>
+      <form class="ai-inputbar" id="ai-form" autocomplete="off">
+        <input class="ai-input" id="ai-input" name="q" placeholder="输入问题或指令，例如：隐藏库存缺失 / 总结今日待办" />
+        <button type="submit" class="ai-send" id="ai-send">发送</button>
+      </form>
+    </aside>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script src="./script.js"></script>
   </body>
 </html>
