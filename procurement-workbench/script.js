@@ -629,6 +629,85 @@ const homeQuickActions = [
   { id: "stock-audit", label: "备货审核", menu: "sales", page: "allocation" }
 ];
 
+const HOME_VIEW_KEY = "homeWorkbenchViewV1";
+
+function getHomeWorkbenchView() {
+  try {
+    const v = localStorage.getItem(HOME_VIEW_KEY);
+    return v === "manager" ? "manager" : "personal";
+  } catch {
+    return "personal";
+  }
+}
+
+function setHomeWorkbenchView(view) {
+  try {
+    localStorage.setItem(HOME_VIEW_KEY, view === "manager" ? "manager" : "personal");
+  } catch {
+    /* ignore */
+  }
+}
+
+function parseMetricNumber(raw) {
+  const txt = String(raw || "");
+  const num = Number(txt.replace(/[^\d.]/g, ""));
+  return Number.isFinite(num) ? num : 0;
+}
+
+function parseMetricWan(raw) {
+  const txt = String(raw || "");
+  if (txt.includes("万")) return parseMetricNumber(txt);
+  const num = parseMetricNumber(txt);
+  return num / 10000;
+}
+
+function formatWan(v) {
+  return `¥ ${v.toFixed(1)}万`;
+}
+
+function formatInteger(v) {
+  return String(Math.max(0, Math.round(v)));
+}
+
+function buildManagerStats() {
+  const byLabel = Object.fromEntries(homeStats.map((s) => [s.label, s]));
+  const purchaseWan = parseMetricWan(byLabel["今日采购额"]?.value);
+  const salesWan = parseMetricWan(byLabel["今日销售额"]?.value);
+  const grossWan = parseMetricWan(byLabel["今日毛利额"]?.value);
+  const abnormal = parseMetricNumber(byLabel["异常单量"]?.value);
+  const arrearsWan = parseMetricWan(byLabel["欠款统计"]?.value);
+  const complaints = parseMetricNumber(byLabel["今日客诉单量"]?.value);
+  const bidWin = parseMetricNumber(byLabel["竞价中标数"]?.value);
+  const teamTodo = homeByModule.reduce((sum, g) => sum + (g.todos?.length || 0), 0);
+
+  return [
+    { label: "团队采购额", value: formatWan(purchaseWan * 4.6), trend: "团队目标达成 82%", trendClass: "up" },
+    { label: "团队销售额", value: formatWan(salesWan * 4.2), trend: "产销比 79.4%", trendClass: "up" },
+    { label: "团队毛利额", value: formatWan(grossWan * 4.4), trend: "毛利率 24.1%", trendClass: "up" },
+    { label: "异常单量", value: formatInteger(abnormal * 3), trend: "跨组织预警 22 单", trendClass: "down" },
+    { label: "团队待办", value: formatInteger(teamTodo), trend: "需本日清理 7 项", trendClass: "warn" },
+    { label: "欠款统计", value: formatWan(arrearsWan * 3.3), trend: "31+ 天占比 18%", trendClass: "warn" },
+    { label: "今日客诉单量", value: formatInteger(complaints * 2.5), trend: "较昨日 -3 单", trendClass: "up" },
+    { label: "竞价中标数", value: formatInteger(bidWin * 4), trend: "中标率 68%", trendClass: "up" }
+  ];
+}
+
+function buildManagerModuleView(groups) {
+  return groups.map((g) => ({
+    ...g,
+    todos: (g.todos || []).map((t, i) => ({
+      ...t,
+      title: `${t.title}${i === 0 ? " · 重点" : ""}`,
+      text: `${t.text}（团队协同）`
+    })),
+    messages: (g.messages || []).map((m) => ({
+      ...m,
+      title: `${m.title} · 团队`,
+      text: `${m.text}（管理视角）`
+    }))
+  }));
+}
+
 const homeInventoryAlert = {
   backlog: {
     title: "库存积压",
@@ -2215,6 +2294,10 @@ function renderMarketDynamicsPage() {
 
 function renderHomePage() {
   const enabled = getHomeWidgetState();
+  const workbenchView = getHomeWorkbenchView();
+  const isManagerView = workbenchView === "manager";
+  const metrics = isManagerView ? buildManagerStats() : homeStats;
+  const moduleView = isManagerView ? buildManagerModuleView(homeByModule) : homeByModule;
   const showCore = enabled.has("coreMetrics");
   const showTodos = enabled.has("todos");
   const showNotices = enabled.has("notices");
@@ -2256,18 +2339,18 @@ function renderHomePage() {
             </div>
             <button type="button" class="home-btn home-btn-ghost" id="home-customize-open">自定义</button>
           </div>
-          <div class="stat-grid stat-grid--home">${renderMetricCards(homeStats)}</div>
+          <div class="stat-grid stat-grid--home">${renderMetricCards(metrics)}</div>
         </section>`
     : "";
 
   const todoCard = showTodos
     ? `<section class="home-section home-section--compact home-todos">
           <div class="panel-head">
-            <h3>我的待办</h3>
+            <h3>${isManagerView ? "团队待办" : "我的待办"}</h3>
             <span class="pill warn">按模块</span>
           </div>
           <div class="home-module-grid home-module-grid--dense">
-            ${homeByModule.map((g) => renderHomeTodoBlock(g)).join("")}
+            ${moduleView.map((g) => renderHomeTodoBlock(g)).join("")}
           </div>
         </section>`
     : "";
@@ -2275,11 +2358,11 @@ function renderHomePage() {
   const noticeCard = showNotices
     ? `<section class="home-section home-section--compact home-col home-notice-col">
           <div class="panel-head">
-            <h3>系统通知</h3>
+            <h3>${isManagerView ? "团队通知" : "系统通知"}</h3>
             <span class="pill">按模块</span>
           </div>
           <div class="home-module-grid home-module-grid--dense">
-            ${homeByModule.map((g) => renderHomeMessageBlock(g)).join("")}
+            ${moduleView.map((g) => renderHomeMessageBlock(g)).join("")}
           </div>
         </section>`
     : "";
@@ -2307,8 +2390,14 @@ function renderHomePage() {
   const quickActions = `
     <section class="home-section home-section--compact home-quick-actions">
       <div class="panel-head">
-        <h3>快捷操作</h3>
-        <span class="pill">常用入口</span>
+        <div class="home-head-left">
+          <h3>快捷操作</h3>
+          <span class="pill">常用入口</span>
+        </div>
+        <div class="home-view-switch" role="tablist" aria-label="工作台视角切换">
+          <button type="button" class="home-view-btn ${!isManagerView ? "is-active" : ""}" data-home-view="personal">采购个人</button>
+          <button type="button" class="home-view-btn ${isManagerView ? "is-active" : ""}" data-home-view="manager">采购管理者</button>
+        </div>
       </div>
       <div class="home-quick-actions-grid">
         ${homeQuickActions
@@ -2729,6 +2818,16 @@ document.addEventListener("click", (event) => {
     event.preventDefault();
     const modal = ensureHomeCustomizeModal();
     if (modal) modal.hidden = false;
+    return;
+  }
+  const viewBtn = event.target.closest(".home-view-btn");
+  if (viewBtn) {
+    event.preventDefault();
+    const view = viewBtn.dataset.homeView === "manager" ? "manager" : "personal";
+    if (view !== getHomeWorkbenchView()) {
+      setHomeWorkbenchView(view);
+      render();
+    }
     return;
   }
   const quickAction = event.target.closest(".home-quick-action-btn");

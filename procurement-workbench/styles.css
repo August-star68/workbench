@@ -1723,6 +1723,36 @@ button {
 
 .home-quick-actions .panel-head {
   margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.home-view-switch {
+  display: inline-flex;
+  gap: 4px;
+  padding: 3px;
+  border-radius: 999px;
+  background: rgba(11, 19, 32, 0.06);
+}
+
+.home-view-btn {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  border-radius: 999px;
+  height: 28px;
+  padding: 0 10px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.home-view-btn.is-active {
+  background: #fff;
+  color: var(--text);
+  box-shadow: 0 1px 2px rgba(11, 19, 32, 0.16);
 }
 
 .home-quick-actions-grid {
