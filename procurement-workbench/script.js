@@ -2063,7 +2063,6 @@ function renderHomeInventoryAlertCombined() {
 }
 
 const MARKET_TAGS_KEY = "homeMarketTagsV1";
-const MARKET_ACTIVE_TAG_KEY = "homeMarketActiveTagV1";
 
 const defaultMarketTags = ["零售", "供应链", "物流", "商品分类选取", "企业福利市场"];
 
@@ -2094,24 +2093,6 @@ function saveMarketTags(tags) {
   }
 }
 
-function getActiveMarketTag(tags) {
-  try {
-    const t = localStorage.getItem(MARKET_ACTIVE_TAG_KEY);
-    if (t && tags.includes(t)) return t;
-  } catch {
-    /* ignore */
-  }
-  return tags[0] ?? "";
-}
-
-function setActiveMarketTag(tag) {
-  try {
-    localStorage.setItem(MARKET_ACTIVE_TAG_KEY, tag);
-  } catch {
-    /* ignore */
-  }
-}
-
 function renderMarketTagsModal(tags) {
   const value = tags.join("、");
   return `
@@ -2119,8 +2100,8 @@ function renderMarketTagsModal(tags) {
       <div class="home-modal" role="dialog" aria-modal="true" aria-labelledby="market-tags-title">
         <div class="home-modal-head">
           <div>
-            <h3 id="market-tags-title">市场动态标签</h3>
-            <p class="home-modal-sub">用“、/，/,/空格/换行”分隔，最多 12 个。</p>
+            <h3 id="market-tags-title">市场动态推送维度</h3>
+            <p class="home-modal-sub">用“、/，/,/空格/换行”分隔，最多 12 个。保存后按维度自动聚合展示。</p>
           </div>
           <button type="button" class="home-modal-close" id="market-tags-close" aria-label="关闭">×</button>
         </div>
@@ -2165,7 +2146,6 @@ function ensureMarketTagsModal() {
       if (reset) {
         event.preventDefault();
         saveMarketTags(defaultMarketTags);
-        setActiveMarketTag(defaultMarketTags[0]);
         host.hidden = true;
         render();
         return;
@@ -2182,8 +2162,6 @@ function ensureMarketTagsModal() {
           .slice(0, 12);
         const finalTags = tags.length ? tags : defaultMarketTags;
         saveMarketTags(finalTags);
-        const active = getActiveMarketTag(finalTags);
-        setActiveMarketTag(active);
         host.hidden = true;
         render();
         return;
@@ -2193,10 +2171,10 @@ function ensureMarketTagsModal() {
   return host;
 }
 
-function renderMarketDynamicsPanel(limit = 10) {
+function renderMarketDynamicsPanel(limit = 20) {
   const tags = getMarketTags();
-  const active = getActiveMarketTag(tags);
-  const items = marketNews.filter((n) => n.tag === active).slice(0, limit);
+  const allowed = new Set(tags);
+  const items = marketNews.filter((n) => allowed.has(n.tag)).slice(0, limit);
 
   return `
     <section class="home-section home-section--compact home-col" id="home-market-dynamics" tabindex="-1">
@@ -2206,17 +2184,6 @@ function renderMarketDynamicsPanel(limit = 10) {
           <span class="pill">采购视角</span>
         </div>
         <button type="button" class="home-btn home-btn-ghost" id="market-tags-open">标签设置</button>
-      </div>
-
-      <div class="market-tags" role="tablist" aria-label="市场动态标签">
-        ${tags
-          .map(
-            (t) => `
-          <button type="button" class="market-tag ${t === active ? "is-active" : ""}" data-market-tag="${t}">
-            ${t}
-          </button>`
-          )
-          .join("")}
       </div>
 
       <ul class="market-list">
@@ -2240,7 +2207,7 @@ function renderMarketDynamicsPanel(limit = 10) {
 function renderMarketDynamicsPage() {
   return `
     <section class="home-page">
-      ${renderMarketDynamicsPanel(10)}
+      ${renderMarketDynamicsPanel(20)}
     </section>
   `;
 }
@@ -2930,16 +2897,6 @@ document.addEventListener("click", (event) => {
 });
 
 document.addEventListener("click", (event) => {
-  const tagBtn = event.target.closest(".market-tag");
-  if (tagBtn) {
-    event.preventDefault();
-    const tag = tagBtn.dataset.marketTag;
-    if (tag) {
-      setActiveMarketTag(tag);
-      render();
-    }
-    return;
-  }
   const open = event.target.closest("#market-tags-open");
   if (open) {
     event.preventDefault();
