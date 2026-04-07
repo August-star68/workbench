@@ -80,7 +80,7 @@ const menuConfig = {
     ]
   },
   analysis: {
-    title: "经营分析",
+    title: "数据统计",
     pages: [
       { id: "module-biz-flow", label: "业务流程图", desc: "指标到行动闭环" },
       { id: "spend-analysis", label: "采购支出分析", desc: "品类、组织、供应商" },
@@ -130,8 +130,8 @@ const fishboneFlow = [
     bottom: ["付款计划与账期视图", "票据与税务字段校验", "保供供方排款优先级"]
   },
   {
-    stage: "经营分析",
-    module: "经营分析",
+    stage: "数据统计",
+    module: "数据统计",
     top: ["采购支出（spend）结构", "价格指数与波动解释", "降本项目与成果池"],
     bottom: ["供应商集中度与风险", "组织 / 品类对标", "复盘报表与审计追溯"]
   }
@@ -154,7 +154,7 @@ const moduleFlowcharts = {
         { shape: "rect", label: "竞价/寻源", icon: "chart" },
         { shape: "rect", label: "销售与分货", icon: "store" },
         { shape: "rect", label: "对账结算", icon: "doc" },
-        { shape: "circle", label: "经营分析", icon: "target" }
+        { shape: "circle", label: "数据统计", icon: "target" }
       ]
     ]
   },
@@ -285,7 +285,7 @@ const moduleFlowcharts = {
     ]
   },
   analysis: {
-    title: "经营分析",
+    title: "数据统计",
     subtitle: "数据抽取—指标—报表—洞察—改进行动（示意）",
     legend: "分析应能下钻到品类、组织与供方，并生成可执行任务。",
     rows: [
@@ -1150,7 +1150,7 @@ const modulePages = {
     kicker: "Spend Analysis",
     title: "采购支出",
     intro:
-      "采购经营分析的第一视角应该是钱花到哪里去了、集中在谁身上、哪些品类涨了、哪些组织能继续降本，而不是简单的付款汇总。",
+      "采购数据统计的第一视角应该是钱花到哪里去了、集中在谁身上、哪些品类涨了、哪些组织能继续降本，而不是简单的付款汇总。",
     facts: ["品类 spend", "供应商集中度", "组织对比"],
     stats: [
       { label: "本月采购额", value: "¥ 1,286万", trend: "同比 +6.2%", trendClass: "warn" },
