@@ -1081,6 +1081,34 @@ button {
   font-size: 1rem;
 }
 
+.home-modal-body {
+  padding: 12px;
+}
+
+.home-textarea {
+  width: 100%;
+  border: 1px solid rgba(11, 19, 32, 0.12);
+  border-radius: 12px;
+  padding: 10px 10px;
+  font: inherit;
+  font-size: 0.86rem;
+  outline: none;
+  resize: vertical;
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.home-textarea:focus {
+  border-color: rgba(78, 205, 196, 0.65);
+  box-shadow: 0 0 0 4px rgba(78, 205, 196, 0.18);
+}
+
+.home-mini-hint {
+  margin-top: 8px;
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
 .home-modal-sub {
   margin: 4px 0 0;
   color: var(--muted);
@@ -1174,6 +1202,87 @@ button {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.market-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.market-tag {
+  border: 1px solid rgba(11, 19, 32, 0.12);
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-weight: 800;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.market-tag:hover {
+  transform: translateY(-1px);
+  border-color: rgba(78, 205, 196, 0.55);
+}
+
+.market-tag.is-active {
+  background: linear-gradient(135deg, #0b1320, var(--teal));
+  border-color: rgba(78, 205, 196, 0.55);
+  color: #fff;
+}
+
+.market-list {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.market-item {
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(11, 19, 32, 0.08);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.market-item-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.market-item-title {
+  font-size: 0.88rem;
+  font-weight: 900;
+  color: var(--text);
+  line-height: 1.25;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.market-item-time {
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.market-item-summary {
+  margin: 6px 0 0;
+  font-size: 0.84rem;
+  color: var(--muted);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
 }
 
 @media (max-width: 720px) {
@@ -1544,6 +1653,14 @@ button {
   min-width: 0;
   display: flex;
   flex-direction: column;
+}
+
+.home-col--stack {
+  gap: 8px;
+}
+
+.home-col--stack > .home-section {
+  flex: 0 1 auto;
 }
 
 .home-section {
