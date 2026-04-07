@@ -2,7 +2,7 @@ const menuConfig = {
   home: {
     title: "工作台",
     pages: [
-      { id: "home-dashboard", label: "总览", desc: "核心数据、待办、通知、库存与商品统计" },
+      { id: "home-dashboard", label: "总览", desc: "核心数据、待办、通知、市场动态、库存与商品统计" },
       { id: "home-tasks", label: "任务中心", desc: "跨模块待办聚合" },
       { id: "home-notify", label: "消息中心", desc: "通知公告与订阅" }
     ]
@@ -1733,7 +1733,7 @@ const HOME_WIDGETS = [
   { id: "inventoryBacklog", label: "库存积压", defaultOn: true },
   { id: "inventoryShortage", label: "库存缺失", defaultOn: true },
   { id: "productStats", label: "商品统计", defaultOn: true },
-  { id: "marketInfo", label: "市场信息", defaultOn: true },
+  { id: "marketInfo", label: "市场动态", defaultOn: true },
   { id: "supplierPerf", label: "供应商绩效", defaultOn: false },
   { id: "arrears", label: "欠款统计", defaultOn: false },
   { id: "chartLine", label: "近期采购额统计", defaultOn: true },
@@ -1743,6 +1743,9 @@ const HOME_WIDGETS = [
 
 const HOME_WIDGETS_STORAGE_KEY = "homeWorkbenchWidgetsV2";
 const HOME_WIDGETS_LEGACY_KEY = "homeWorkbenchWidgetsV1";
+/** One-time: ensure marketInfo is present for profiles saved before「市场动态」组件上线 */
+const HOME_WIDGET_SCHEMA_KEY = "homeWorkbenchWidgetSchemaV1";
+const HOME_WIDGET_SCHEMA_VAL = "2";
 
 /** One-time rollout: new defaultOn widgets (e.g. marketInfo) merge into legacy V1 saves only. */
 function mergeDefaultOnIntoSet(set) {
@@ -1782,7 +1785,19 @@ function getHomeWidgetState() {
     if (!Array.isArray(arr)) {
       return new Set(HOME_WIDGETS.filter((w) => w.defaultOn).map((w) => w.id));
     }
-    return new Set(arr.filter((x) => typeof x === "string"));
+    const set = new Set(arr.filter((x) => typeof x === "string"));
+    try {
+      if (localStorage.getItem(HOME_WIDGET_SCHEMA_KEY) !== HOME_WIDGET_SCHEMA_VAL) {
+        if (!set.has("marketInfo")) {
+          set.add("marketInfo");
+          saveHomeWidgetState(Array.from(set));
+        }
+        localStorage.setItem(HOME_WIDGET_SCHEMA_KEY, HOME_WIDGET_SCHEMA_VAL);
+      }
+    } catch {
+      /* ignore */
+    }
+    return set;
   } catch {
     return new Set(HOME_WIDGETS.filter((w) => w.defaultOn).map((w) => w.id));
   }
@@ -1800,6 +1815,7 @@ function resetHomeWidgetState() {
   try {
     localStorage.removeItem(HOME_WIDGETS_STORAGE_KEY);
     localStorage.removeItem(HOME_WIDGETS_LEGACY_KEY);
+    localStorage.removeItem(HOME_WIDGET_SCHEMA_KEY);
   } catch {
     /* ignore */
   }
@@ -2105,7 +2121,7 @@ function renderMarketTagsModal(tags) {
       <div class="home-modal" role="dialog" aria-modal="true" aria-labelledby="market-tags-title">
         <div class="home-modal-head">
           <div>
-            <h3 id="market-tags-title">市场信息标签</h3>
+            <h3 id="market-tags-title">市场动态标签</h3>
             <p class="home-modal-sub">用“、/，/,/空格/换行”分隔，最多 12 个。</p>
           </div>
           <button type="button" class="home-modal-close" id="market-tags-close" aria-label="关闭">×</button>
@@ -2185,16 +2201,16 @@ function renderHomeMarketInfo() {
   const items = marketNews.filter((n) => n.tag === active).slice(0, 6);
 
   return `
-    <section class="home-section home-section--compact home-col">
+    <section class="home-section home-section--compact home-col" id="home-market-dynamics" tabindex="-1">
       <div class="panel-head">
         <div class="home-head-left">
-          <h3>市场信息</h3>
+          <h3>市场动态</h3>
           <span class="pill">采购视角</span>
         </div>
         <button type="button" class="home-btn home-btn-ghost" id="market-tags-open">标签设置</button>
       </div>
 
-      <div class="market-tags" role="tablist" aria-label="市场信息标签">
+      <div class="market-tags" role="tablist" aria-label="市场动态标签">
         ${tags
           .map(
             (t) => `
@@ -2315,8 +2331,16 @@ function renderHomePage() {
         </section>`
     : "";
 
+  const marketQuickJump =
+    showMarketInfo
+      ? `<div class="home-quick-nav" role="navigation" aria-label="首页快捷定位">
+        <a class="home-quick-link" href="#home-market-dynamics">市场动态</a>
+      </div>`
+      : "";
+
   return `
     <section class="home-page">
+      ${marketQuickJump}
       ${
         hasKpiCol || hasNoticeCol
           ? `<div class="${topRowClass}">
