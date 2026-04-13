@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI配品可视化页面</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>AI配品可视化页面</h1>
+    <section class="panel-grid">
+      <section class="panel">
+        <h2>1) 上传配品文件</h2>
+        <input id="fileInput" type="file" accept=".csv,.xlsx,.xls" />
+        <button id="uploadBtn">上传</button>
+        <p id="uploadStatus" class="hint">等待上传</p>
+      </section>
+
+      <section class="panel">
+        <h2>2) 条件查询</h2>
+        <label>商品品类（多选）</label>
+        <select id="categories" multiple size="5"></select>
+
+        <div class="row">
+          <div>
+            <label>套餐价位最小值</label>
+            <input id="priceMin" type="number" min="0" placeholder="例如 100" />
+          </div>
+          <div>
+            <label>套餐价位最大值</label>
+            <input id="priceMax" type="number" min="0" placeholder="例如 600" />
+          </div>
+        </div>
+
+        <label>推荐套餐数</label>
+        <input id="recommendCount" type="number" min="1" max="20" value="5" />
+
+        <label>需求描述（可选）</label>
+        <input id="userIntent" type="text" placeholder="例如 摄影和办公场景" />
+
+        <button id="queryBtn">查询推荐</button>
+      </section>
+    </section>
+
+    <section class="panel">
+      <h2>3) 推荐结果</h2>
+      <div id="results" class="results"></div>
+    </section>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
