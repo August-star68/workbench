@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>销售工作台 - 手机首页设计稿</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="presentation">
+      <section class="stage-copy">
+        <p class="eyebrow">Sales Workbench Mobile</p>
+        <h1>销售工作台首页</h1>
+        <p class="stage-text">
+          这是一版带手机外框的首页设计稿，默认展示个人版本，并支持切换到团队版本。
+          页面底部保留“首页 / 工作台 / 我的”三导航，本次聚焦首页内容体验。
+        </p>
+
+        <div class="stage-points">
+          <article class="point-card">
+            <span class="point-index">01</span>
+            <h2>个人视角优先</h2>
+            <p>把销售每天最常看的数据、我提交的待办和经营提醒放到同一屏。</p>
+          </article>
+          <article class="point-card">
+            <span class="point-index">02</span>
+            <h2>团队视角可切换</h2>
+            <p>保留同样的信息骨架，方便从个人执行切到团队管理。</p>
+          </article>
+          <article class="point-card">
+            <span class="point-index">03</span>
+            <h2>首页氛围更聚焦</h2>
+            <p>用目标进度、重点待办和风险提醒形成清晰的行动优先级。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="device-stage" aria-label="手机页面展示">
+        <div class="halo halo-a"></div>
+        <div class="halo halo-b"></div>
+
+        <div class="phone-frame">
+          <div class="phone-screen">
+            <div class="status-bar" aria-hidden="true">
+              <span>9:41</span>
+              <div class="status-icons">
+                <span class="signal"></span>
+                <span class="wifi"></span>
+                <span class="battery"><i></i></span>
+              </div>
+            </div>
+
+            <section class="app-shell">
+              <header class="home-header">
+                <div>
+                  <p class="page-kicker">销售工作台</p>
+                  <h2>首页</h2>
+                </div>
+              </header>
+
+              <div class="user-banner">
+                <div>
+                  <strong>优先处理待审核数据与负毛利商品</strong>
+                </div>
+                <span class="banner-badge">3 条重点</span>
+              </div>
+
+              <div class="mode-switch" role="tablist" aria-label="首页版本切换">
+                <button
+                  class="mode-pill active"
+                  type="button"
+                  role="tab"
+                  aria-selected="true"
+                  data-mode-trigger="personal"
+                >
+                  个人版本
+                </button>
+                <button
+                  class="mode-pill"
+                  type="button"
+                  role="tab"
+                  aria-selected="false"
+                  data-mode-trigger="team"
+                >
+                  团队版本
+                </button>
+              </div>
+
+              <div class="mode-panels">
+                <div class="mode-panel active" data-mode-panel="personal">
+                  <section class="hero-card hero-personal">
+                    <div class="hero-copy">
+                      <p class="hero-label">数据</p>
+                      <h3>业绩完成率稳步推进</h3>
+                      <p>今日销售和出库表现良好，但异常订单与欠款仍需持续跟进。</p>
+                    </div>
+                    <div class="progress-ring" style="--progress: 82">
+                      <div>
+                        <strong>82%</strong>
+                        <span>业绩完成率</span>
+                      </div>
+                    </div>
+                  </section>
+
+                  <section class="content-section">
+                    <div class="section-head">
+                      <div>
+                        <p class="section-kicker">Data Snapshot</p>
+                        <h3>数据</h3>
+                      </div>
+                      <span class="section-tag">实时更新</span>
+                    </div>
+
+                    <div class="metrics-grid">
+                      <article class="metric-tile">
+                        <div class="metric-topline">
+                          <span class="metric-label">今日销售额</span>
+                          <span class="metric-chip">销</span>
+                        </div>
+                        <strong>¥ 286,000</strong>
+                        <div class="metric-bottomline">
+                          <em class="metric-trend up">较昨日 +12%</em>
+                          <span class="metric-meta">目标进度 81%</span>
+                        </div>
+                      </article>
+                      <article class="metric-tile">
+                        <div class="metric-topline">
+                          <span class="metric-label">今日出库额</span>
+                          <span class="metric-chip">库</span>
+                        </div>
+                        <strong>¥ 198,000</strong>
+                        <div class="metric-bottomline">
+                          <em class="metric-trend up">按计划推进</em>
+                          <span class="metric-meta">已出 24 单</span>
+                        </div>
+                      </article>
+                      <article class="metric-tile alert">
+                        <div class="metric-topline">
+                          <span class="metric-label">异常订单数</span>
+                          <span class="metric-chip alert">异</span>
+                        </div>
+                        <strong>07</strong>
+                        <div class="metric-bottomline">
+                          <em class="metric-trend down">3 单待人工处理</em>
+                          <span class="metric-meta">超时 2 单</span>
+                        </div>
+                      </article>
+                      <article class="metric-tile soft">
+                        <div class="metric-topline">
+                          <span class="metric-label">欠款金额</span>
+                          <span class="metric-chip soft">款</span>
+                        </div>
+                        <strong>¥ 64,300</strong>
+                        <div class="metric-bottomline">
+                          <em class="metric-trend neutral">2 家客户待回款</em>
+                          <span class="metric-meta">临期 1 家</span>
+                        </div>
+                      </article>
+                    </div>
+                  </section>
+
+                  <section class="content-section">
+                    <div class="section-head">
+                      <div>
+                        <p class="section-kicker">My Submissions</p>
+                        <h3>待办</h3>
+                      </div>
+                      <span class="section-tag">我提交的</span>
+                    </div>
+
+                    <div class="list-stack">
+                      <article class="list-card">
+                        <div class="list-main compact">
+                          <div class="list-line">
+                            <strong>订单价格调整申请</strong>
+                            <span class="list-code">NO.001</span>
+                          </div>
+                          <div class="list-subline">
+                            <span>09:20 提交</span>
+                            <span>当前节点 销售经理</span>
+                          </div>
+                        </div>
+                        <span class="list-status waiting">待审核</span>
+                      </article>
+                      <article class="list-card">
+                        <div class="list-main compact">
+                          <div class="list-line">
+                            <strong>客户授信额度变更</strong>
+                            <span class="list-code">NO.002</span>
+                          </div>
+                          <div class="list-subline">
+                            <span>昨日 18:40</span>
+                            <span>当前节点 财务复核</span>
+                          </div>
+                        </div>
+                        <span class="list-status waiting">待审核</span>
+                      </article>
+                      <article class="list-card">
+                        <div class="list-main compact">
+                          <div class="list-line">
+                            <strong>出库异常说明单</strong>
+                            <span class="list-code">NO.003</span>
+                          </div>
+                          <div class="list-subline">
+                            <span>昨日 16:12</span>
+                            <span>当前节点 运营确认</span>
+                          </div>
+                        </div>
+                        <span class="list-status processing">处理中</span>
+                      </article>
+                    </div>
+                  </section>
+
+                  <section class="content-section">
+                    <div class="section-head">
+                      <div>
+                        <p class="section-kicker">Reminder</p>
+                        <h3>提醒</h3>
+                      </div>
+                      <span class="section-tag warn">需关注</span>
+                    </div>
+
+                    <div class="notice-stack">
+                      <article class="notice-card">
+                        <span class="notice-severity high">高</span>
+                        <div class="notice-main compact">
+                          <div class="notice-line">
+                            <strong>商品 XXX 负毛利</strong>
+                            <span class="notice-code">毛利预警</span>
+                          </div>
+                          <div class="notice-subline">
+                            <span>对象 商品 XXX</span>
+                            <span>当前毛利 -3.2%</span>
+                          </div>
+                          <p>建议立即核查成交价与补贴策略，必要时暂停继续报价。</p>
+                        </div>
+                      </article>
+                      <article class="notice-card">
+                        <span class="notice-severity medium">中</span>
+                        <div class="notice-main compact">
+                          <div class="notice-line">
+                            <strong>客户华东医采欠款临近账期</strong>
+                            <span class="notice-code">回款预警</span>
+                          </div>
+                          <div class="notice-subline">
+                            <span>对象 华东医采</span>
+                            <span>剩余 2 天到期</span>
+                          </div>
+                          <p>建议今天同步回款计划，避免影响后续发货和额度使用。</p>
+                        </div>
+                      </article>
+                      <article class="notice-card">
+                        <span class="notice-severity high">高</span>
+                        <div class="notice-main compact">
+                          <div class="notice-line">
+                            <strong>订单 SO2026040607 超时未分配库存</strong>
+                            <span class="notice-code">履约预警</span>
+                          </div>
+                          <div class="notice-subline">
+                            <span>对象 SO2026040607</span>
+                            <span>已超时 1.5 小时</span>
+                          </div>
+                          <p>已影响今日发运排程，需要尽快协调仓库并反馈交期。</p>
+                        </div>
+                      </article>
+                    </div>
+                  </section>
+                </div>
+
+                <div class="mode-panel" data-mode-panel="team">
+                  <section class="hero-card hero-team">
+                    <div class="hero-copy">
+                      <p class="hero-label">团队概览</p>
+                      <h3>团队目标进入冲刺区</h3>
+                      <p>整体达成良好，当前重点是审批效率、风险订单与应收清理。</p>
+                    </div>
+                    <div class="progress-ring" style="--progress: 76">
+                      <div>
+                        <strong>76%</strong>
+                        <span>团队达成率</span>
+                      </div>
+                    </div>
+                  </section>
+
+                  <section class="content-section">
+                    <div class="section-head">
+                      <div>
+                        <p class="section-kicker">Team Data</p>
+                        <h3>团队数据</h3>
+                      </div>
+                      <span class="section-tag">今日汇总</span>
+                    </div>
+
+                    <div class="metrics-grid">
+                      <article class="metric-tile">
+                        <span class="metric-label">团队销售额</span>
+                        <strong>¥ 1,286,000</strong>
+                        <em class="metric-trend up">环比 +9%</em>
+                      </article>
+                      <article class="metric-tile">
+                        <span class="metric-label">团队出库额</span>
+                        <strong>¥ 932,000</strong>
+                        <em class="metric-trend up">履约稳定</em>
+                      </article>
+                      <article class="metric-tile alert">
+                        <span class="metric-label">待审核单据</span>
+                        <strong>21</strong>
+                        <em class="metric-trend down">5 单已超 4 小时</em>
+                      </article>
+                      <article class="metric-tile soft">
+                        <span class="metric-label">风险订单</span>
+                        <strong>09</strong>
+                        <em class="metric-trend neutral">3 单需跨部门协同</em>
+                      </article>
+                    </div>
+                  </section>
+
+                  <section class="content-section">
+                    <div class="section-head">
+                      <div>
+                        <p class="section-kicker">Team To-do</p>
+                        <h3>团队待办</h3>
+                      </div>
+                      <span class="section-tag">待处理</span>
+                    </div>
+
+                    <div class="list-stack">
+                      <article class="list-card">
+                        <div class="list-main">
+                          <strong>华北大客户报价申请</strong>
+                          <p>需销售负责人和财务共同确认毛利底线</p>
+                        </div>
+                        <span class="list-status waiting">待协同</span>
+                      </article>
+                      <article class="list-card">
+                        <div class="list-main">
+                          <strong>4 月冲刺计划复盘</strong>
+                          <p>6 位成员尚未提交本周客户推进计划</p>
+                        </div>
+                        <span class="list-status processing">跟进中</span>
+                      </article>
+                      <article class="list-card">
+                        <div class="list-main">
+                          <strong>账期客户回款清单</strong>
+                          <p>需今天 17:00 前同步最新承诺回款时间</p>
+                        </div>
+                        <span class="list-status warning">紧急</span>
+                      </article>
+                    </div>
+                  </section>
+
+                  <section class="content-section">
+                    <div class="section-head">
+                      <div>
+                        <p class="section-kicker">Team Reminder</p>
+                        <h3>团队提醒</h3>
+                      </div>
+                      <span class="section-tag warn">风险提示</span>
+                    </div>
+
+                    <div class="notice-stack">
+                      <article class="notice-card">
+                        <span class="notice-dot"></span>
+                        <div>
+                          <strong>团队内 3 个商品出现负毛利成交</strong>
+                          <p>建议统一校准底价规则，避免再次触发异常报价。</p>
+                        </div>
+                      </article>
+                      <article class="notice-card">
+                        <span class="notice-dot"></span>
+                        <div>
+                          <strong>2 家重点客户回款进度偏慢</strong>
+                          <p>本周若未回款，可能影响整体达成和后续发货。</p>
+                        </div>
+                      </article>
+                      <article class="notice-card">
+                        <span class="notice-dot"></span>
+                        <div>
+                          <strong>审批链路高峰集中在午后</strong>
+                          <p>建议分批提交审核，减少同一时段积压。</p>
+                        </div>
+                      </article>
+                    </div>
+                  </section>
+                </div>
+              </div>
+
+              <nav class="tabbar" aria-label="底部导航">
+                <button class="tab-item active" type="button" aria-current="page">
+                  <span class="tab-icon home-icon"></span>
+                  <span>首页</span>
+                </button>
+                <button class="tab-item" type="button">
+                  <span class="tab-icon work-icon"></span>
+                  <span>工作台</span>
+                </button>
+                <button class="tab-item" type="button">
+                  <span class="tab-icon mine-icon"></span>
+                  <span>我的</span>
+                </button>
+              </nav>
+            </section>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
